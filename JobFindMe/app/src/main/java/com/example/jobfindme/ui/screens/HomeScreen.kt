@@ -112,7 +112,7 @@ fun Welcome(modifier: Modifier = Modifier) {
                 }
 
                 Image(
-                    painter = painterResource(id = R.drawable.app_logo),
+                    painter = painterResource(id = R.drawable.app_logo_rounded),
                     contentDescription = "Application Logo",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

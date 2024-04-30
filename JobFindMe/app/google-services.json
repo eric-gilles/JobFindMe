@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "130927318988",
+    "firebase_url": "https://jobfindme-8fa56-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "jobfindme-8fa56",
+    "storage_bucket": "jobfindme-8fa56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130927318988:android:83eaebe5583078b262af69",
+        "android_client_info": {
+          "package_name": "com.example.jobfindme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKRDoAynEsTeb70qtbPM7ugLliFS91N8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
