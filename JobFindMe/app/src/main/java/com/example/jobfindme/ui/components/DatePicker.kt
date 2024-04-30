@@ -1,4 +1,4 @@
-package com.example.jobfindme
+package com.example.jobfindme.ui.components
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable

@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.jobfindme.ui.screens.Login
 import com.example.jobfindme.ui.screens.UserForm
 
 
@@ -33,8 +34,14 @@ private fun ChooseSidePreview() {
 private fun UserFormPreview(){
     UserForm(Modifier)
 }
-@Preview(widthDp = 375, heightDp = 812)
+@Preview
 @Composable
 private fun EntrepriseregisterPreview() {
     Entrepriseregister(Modifier)
+}
+
+@Preview
+@Composable
+private fun LoginForm(){
+    Login(Modifier)
 }

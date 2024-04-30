@@ -2,7 +2,13 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ChooseSidePreview">
+        <State />
+      </entry>
       <entry key="EntrepriseregisterPreview">
+        <State />
+      </entry>
+      <entry key="LoginForm">
         <State />
       </entry>
       <entry key="UserFormPreview">
