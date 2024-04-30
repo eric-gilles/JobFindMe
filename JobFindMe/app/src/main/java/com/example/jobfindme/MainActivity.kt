@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.jobfindme.ui.components.WelcomeComponent
 import com.example.jobfindme.ui.screens.Login
 import com.example.jobfindme.ui.screens.UserForm
 
@@ -44,4 +45,10 @@ private fun EntrepriseregisterPreview() {
 @Composable
 private fun LoginForm(){
     Login(Modifier)
+}
+
+@Preview
+@Composable
+private fun Welcome(){
+    WelcomeComponent(Modifier)
 }
