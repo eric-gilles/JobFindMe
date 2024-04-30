@@ -1,16 +1,32 @@
+package com.example.jobfindme.ui.screens
+
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,38 +36,65 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Constraints.Companion.Infinity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.example.jobfindme.Shape
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
+import com.maxkeppeler.sheets.calendar.CalendarDialog
+import com.maxkeppeler.sheets.calendar.models.CalendarConfig
+import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UserForm(modifier: Modifier = Modifier) {
+    var email by remember { mutableStateOf(TextFieldValue()) }
+    var firstname by remember { mutableStateOf(TextFieldValue()) }
+    var lastname by remember { mutableStateOf(TextFieldValue()) }
+    var nationality by remember { mutableStateOf(TextFieldValue()) }
+    val birthdate = remember { mutableStateOf(LocalDate.now())}
+    val open = remember { mutableStateOf(false)}
+
+
+    var city by remember { mutableStateOf(TextFieldValue()) }
+    var phone by remember { mutableStateOf(TextFieldValue()) }
+    var password by remember { mutableStateOf(TextFieldValue()) }
+    var confirm by remember { mutableStateOf(TextFieldValue()) }
+
     Box(
         modifier = modifier
-            .requiredWidth(width = 375.dp)
-            .requiredHeight(height = 812.dp)
+            .verticalScroll(rememberScrollState())
     ) {
+
         Box(
             modifier = Modifier
                 .requiredWidth(width = 375.dp)
-                .requiredHeight(height = 812.dp)
+                .requiredHeight(height = 1100.dp)
                 .background(color = Color(0xfff6f6f6))
         ) {
             Shape(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = (-99).dp,
-                        y = (-109).dp))
+                    .offset(
+                        x = (-99).dp,
+                        y = (-109).dp
+                    ))
 
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 84.dp,
-                        y = 607.dp)
+                    .offset(
+                        x = 84.dp,
+                        y = 850.dp
+                    )
                     .requiredWidth(width = 207.dp)
                     .requiredHeight(height = 34.dp)
             ) {
@@ -69,13 +112,7 @@ fun UserForm(modifier: Modifier = Modifier) {
                                     color = Color.White,
                                     fontSize = 16.sp
                                 )
-                            ) { append("Upload a CV") }
-                            withStyle(
-                                style = SpanStyle(
-                                    color = Color(0xffdf0e0e),
-                                    fontSize = 16.sp
-                                )
-                            ) { append("*") }
+                            ) { append("Upload a CV *") }
                         },
                         modifier = Modifier
                             .align(alignment = Alignment.TopStart)
@@ -90,29 +127,38 @@ fun UserForm(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 64.dp,
-                    y = 83.dp)
+                .offset(
+                    x = 64.dp,
+                    y = 83.dp
+                )
                 .requiredWidth(width = 246.dp)
                 .requiredHeight(height = 69.dp)
         ) {
-            Text(
-                textAlign = TextAlign.Center,
-                lineHeight = Infinity.sp,
-                text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 13.168039321899414.sp,
-                        fontStyle = FontStyle.Italic)) {append("We'll help you find a job. ")}
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold)) {append("Please Register")}},
+
+            Box (
                 modifier = Modifier
-                    .align(alignment = Alignment.TopCenter)
-                    .offset(x = 0.5.dp,
-                        y = 38.dp)
-                    .requiredWidth(width = 187.dp)
-                    .requiredHeight(height = 31.dp))
+                    .align(Alignment.TopCenter)
+                    .offset(y = 30.dp) // Déplacer le Column vers le bas
+
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ){
+                    Text(
+                        text = "We'll help you find a job.",
+                        color = Color.Black,
+                        fontSize = 13.sp,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Please Register",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
             Text(
                 text = "Welcome Candidat !",
                 color = Color.Black.copy(alpha = 0.75f),
@@ -123,174 +169,185 @@ fun UserForm(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Bold),
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
-                    .offset(x = 0.dp,
-                        y = 0.dp)
+                    .offset(
+                        x = 0.dp,
+                        y = -5.dp
+                    )
                     .requiredWidth(width = 246.dp)
                     .requiredHeight(height = 28.dp))
         }
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 37.dp,
-                    y = 165.4990234375.dp)
-                .requiredWidth(width = 298.dp)
-                .requiredHeight(height = 436.dp)
+                .offset(x = 37.dp, y = 190.dp)
+                .requiredWidth(width = 300.dp)
+                .requiredHeight(height = 800.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 2.dp,
-                        y = 98.9478759765625.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White))
-            {
-                Text(
-                    lineHeight = 9.sp,
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(
-                            color = Color.Black,
-                            fontSize = 16.sp)) {append("Enter your lastname")}
-                        withStyle(style = SpanStyle(
-                            color = Color(0xffdf0e0e))) {append(" *")}},
-                    modifier = Modifier.align(Alignment.Center))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = {
+                        Text(
+                            text = "Email *",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
 
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 2.dp,
-                        y = 49.473876953125.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    lineHeight = 9.sp,
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(
-                            color = Color.Black,
-                            fontSize = 16.sp)) {append("Enter your firstname")}
-                        withStyle(style = SpanStyle(
-                            color = Color(0xffdf0e0e))) {append(" *")}},
-                    modifier = Modifier.align(Alignment.Center))
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 0.dp,
-                        y = 146.85107421875.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    text = "Enter your nationality",
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center))
-            }
+                OutlinedTextField(
+                    value = firstname,
+                    onValueChange = { firstname = it },
+                    label = {
+                        Text(
+                            text = "First Name *",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
 
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 2.dp,
-                        y = 0.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    text = "Enter your email",
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center))
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 0.dp,
-                        y = 194.75439453125.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    text = "Enter your phone number",
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center))
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 0.dp,
-                        y = 242.6575927734375.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    text = "Enter your birthdate",
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center))
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 0.dp,
-                        y = 292.5009765625.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    text = "Enter your city",
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center))
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 0.dp,
-                        y = 345.5009765625.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    lineHeight = 9.sp,
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(
-                            color = Color.Black,
-                            fontSize = 16.sp)) {append("Enter your password")}
-                        withStyle(style = SpanStyle(
-                            color = Color(0xffdf0e0e))) {append(" *")}},
-                    modifier = Modifier.align(Alignment.Center))
-            }
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 0.dp,
-                        y = 396.5009765625.dp)
-                    .requiredWidth(width = 296.dp)
-                    .requiredHeight(height = 39.dp)
-                    .clip(shape = RoundedCornerShape(15.705995559692383.dp))
-                    .background(color = Color.White)){
-                Text(
-                    lineHeight = 9.sp,
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(
-                            color = Color.Black,
-                            fontSize = 16.sp)) {append("Confirm your password")}
-                        withStyle(style = SpanStyle(
-                            color = Color(0xffdf0e0e))) {append(" *")}},
-                    modifier = Modifier.align(Alignment.Center))
+                OutlinedTextField(
+                    value = lastname,
+                    onValueChange = { lastname = it },
+
+                    label = {
+                        Text(
+                            text = "Last Name *",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+                TextField(
+                    modifier = Modifier.clickable { //Click event
+                        open.value = true
+                    },
+                    enabled = false,// <- Add this to make click event work
+                    value = birthdate.value.format(DateTimeFormatter.ISO_DATE) ,
+                    onValueChange = {},
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant)
+                )
+                if (open.value) {
+                    CalendarDialog(
+                        state = rememberUseCaseState(visible = true, true, onCloseRequest = { open.value = false} ),
+                        config = CalendarConfig(
+                            yearSelection = true,
+                            style = CalendarStyle.MONTH,
+                        ),
+                        selection = CalendarSelection.Date(
+                            selectedDate = birthdate.value
+                        ) { newDate ->
+                            birthdate.value = newDate
+                        },
+                    )
+                }
+
+                OutlinedTextField(
+                    value = nationality,
+                    onValueChange = { nationality = it },
+                    label = {
+                        Text(
+                            text = "Nationality",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = { city = it },
+                    label = {
+                        Text(
+                            text = "City",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    label = {
+                        Text(
+                            text = "Phone",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    visualTransformation = PasswordVisualTransformation(),
+                    label = {
+                        Text(
+                            text = "Password *",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+
+                OutlinedTextField(
+                    value = confirm,
+                    onValueChange = { confirm = it },
+                    visualTransformation = PasswordVisualTransformation(),
+
+                    label = {
+                        Text(
+                            text = "Confirm Password *",
+                            fontSize = 18.sp
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
             }
         }
+
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 24.dp,
-                    y = 652.dp)
+                .offset(
+                    x = 24.dp,
+                    y = 910.dp
+                )
                 .requiredWidth(width = 326.dp)
                 .requiredHeight(height = 64.dp)
         ) {
@@ -330,13 +387,17 @@ fun UserForm(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Medium)) {append("Sign In")}},
             modifier = Modifier
                 .align(alignment = Alignment.TopCenter)
-                .offset(x = (-0.5).dp,
-                    y = 732.dp))
+                .offset(
+                    x = (-0.5).dp,
+                    y = 990.dp
+                ))
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 84.dp,
-                    y = 761.dp)
+                .offset(
+                    x = 84.dp,
+                    y = 1030.dp
+                )
                 .requiredWidth(width = 207.dp)
                 .requiredHeight(height = 34.dp)
         ) {
@@ -355,21 +416,26 @@ fun UserForm(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Medium),
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 52.dp,
-                        y = 3.1817626953125.dp))
+                    .offset(
+                        x = 52.dp,
+                        y = 3.1817626953125.dp
+                    ))
         }
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 38.dp,
-                    y = 57.dp)
+                .offset(
+                    x = 38.dp,
+                    y = 57.dp
+                )
                 .requiredWidth(width = 32.dp)
                 .requiredHeight(height = 29.dp)
                 .clip(shape = MaterialTheme.shapes.small)
                 .background(color = Color.White)
-                .border(border = BorderStroke(8.dp, Color.White),
-                    shape = MaterialTheme.shapes.small))
+                .border(
+                    border = BorderStroke(8.dp, Color.White),
+                    shape = MaterialTheme.shapes.small
+                ))
     }
 }
-
 

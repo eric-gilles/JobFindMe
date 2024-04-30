@@ -2,19 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="BottomNavPreview">
+      <entry key="EntrepriseregisterPreview">
         <State />
       </entry>
-      <entry key="ErrorGPSPreview">
-        <State />
-      </entry>
-      <entry key="ShapePreview">
-        <State />
-      </entry>
-      <entry key="SplashPreview">
-        <State />
-      </entry>
-      <entry key="WelcomePreview">
+      <entry key="UserFormPreview">
         <State />
       </entry>
       <entry key="app">
