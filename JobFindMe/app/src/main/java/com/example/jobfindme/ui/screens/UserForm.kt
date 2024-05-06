@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -40,6 +42,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -55,7 +58,10 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UserForm(modifier: Modifier = Modifier) {
+@Preview
+fun UserForm(modifier: Modifier = Modifier, onSignUpClicked: (email: String, password: String) -> Unit
+             ,
+) {
     var email by remember { mutableStateOf(TextFieldValue()) }
     var firstname by remember { mutableStateOf(TextFieldValue()) }
     var lastname by remember { mutableStateOf(TextFieldValue()) }
@@ -70,6 +76,7 @@ fun UserForm(modifier: Modifier = Modifier) {
     var confirm by remember { mutableStateOf(TextFieldValue()) }
 
     Box(
+
         modifier = modifier
             .verticalScroll(rememberScrollState())
     ) {
@@ -98,12 +105,14 @@ fun UserForm(modifier: Modifier = Modifier) {
                     .requiredWidth(width = 207.dp)
                     .requiredHeight(height = 34.dp)
             ) {
-                Box(
+                Button(
+                    onClick = {
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xff50c2c9)),
                     modifier = Modifier
                         .requiredWidth(width = 207.dp)
-                        .requiredHeight(height = 34.dp)
-                        .clip(shape = RoundedCornerShape(3.dp))
-                        .background(color = Color(0xff50c2c9))) {
+                        .requiredHeight(height = 34.dp)){
                     Text(
                         lineHeight = 9.sp,
                         text = buildAnnotatedString {
@@ -114,12 +123,6 @@ fun UserForm(modifier: Modifier = Modifier) {
                                 )
                             ) { append("Upload a CV *") }
                         },
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(
-                                x = 52.dp,
-                                y = 5.1817626953125.dp
-                            )
                     )
                 }
             }
@@ -138,7 +141,7 @@ fun UserForm(modifier: Modifier = Modifier) {
             Box (
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = 30.dp) // Déplacer le Column vers le bas
+                    .offset(y = 30.dp)
 
             ) {
                 Column(
@@ -351,12 +354,19 @@ fun UserForm(modifier: Modifier = Modifier) {
                 .requiredWidth(width = 326.dp)
                 .requiredHeight(height = 64.dp)
         ) {
-            Box(
+            Button(
+                onClick = {
+                    onSignUpClicked(email.text,password.text)
+
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xff50c2c9)),
+
                 modifier = Modifier
                     .requiredWidth(width = 326.dp)
                     .requiredHeight(height = 64.dp)
-                    .clip(shape = RoundedCornerShape(6.dp))
-                    .background(color = Color(0xff50c2c9))) {
+
+            ) {
                 Text(
                     text = "Register",
                     color = Color.White,
@@ -365,14 +375,11 @@ fun UserForm(modifier: Modifier = Modifier) {
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopCenter)
-                        .offset(
-                            x = 0.dp,
-                            y = 14.272705078125.dp
-                        )
+                    modifier = Modifier.align(alignment = Alignment.CenterVertically)
                 )
             }
+
+
         }
         Text(
             lineHeight = 9.sp,
@@ -401,25 +408,24 @@ fun UserForm(modifier: Modifier = Modifier) {
                 .requiredWidth(width = 207.dp)
                 .requiredHeight(height = 34.dp)
         ) {
-            Box(
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xff50c2c9)),
                 modifier = Modifier
                     .requiredWidth(width = 207.dp)
-                    .requiredHeight(height = 34.dp)
-                    .clip(shape = RoundedCornerShape(3.dp))
-                    .background(color = Color(0xff50c2c9)))
-            Text(
-                text = "Anonymous ?",
-                color = Color.White,
-                lineHeight = 9.38.em,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium),
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(
-                        x = 52.dp,
-                        y = 3.1817626953125.dp
-                    ))
+                    .requiredHeight(height = 34.dp)) {
+                        Text(
+                            text = "Anonymous ?",
+                            color = Color.White,
+                            lineHeight = 9.38.em,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            ),
+
+                        )
+                    }
         }
         Box(
             modifier = Modifier

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.times
 import com.example.jobfindme.R
 
 @Composable
+@Preview
 fun Welcome(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
@@ -66,19 +69,28 @@ fun Welcome(modifier: Modifier = Modifier) {
                         .requiredWidth(width = 325.dp)
                         .requiredHeight(height = 62.dp)
                 ) {
-                    Box(
+                    Button(
+                        onClick = {
+                            // Code à exécuter lorsque le bouton est cliqué (par exemple, interaction avec Firebase)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xff50c2c9)),
+
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(color = Color(0xff50c2c9)))
-                    Text(
-                        text = "Get Started",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 7.62.em,
-                        style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .wrapContentHeight(align = Alignment.CenterVertically))
+                            .requiredWidth(width = 326.dp)
+                            .requiredHeight(height = 64.dp)
+                    ){
+                        Text(
+                            text = "Get Started",
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 7.62.em,
+                            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .wrapContentHeight(align = Alignment.CenterVertically)
+                        )
+                    }
                 }
                 Text(
                     text = "Welcome on JobFindMe !",

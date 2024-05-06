@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.jobfindme.R
 
 @Composable
+@Preview
 fun ErrorGPS(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier

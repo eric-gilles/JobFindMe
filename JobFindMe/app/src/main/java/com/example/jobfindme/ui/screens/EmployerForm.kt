@@ -16,6 +16,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,6 +39,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints.Companion.Infinity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -44,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import java.time.LocalDate
 
 @Composable
+@Preview
 fun Entrepriseregister(modifier: Modifier = Modifier) {
     var companyName by remember { mutableStateOf(TextFieldValue()) }
     var companyAddress by remember { mutableStateOf(TextFieldValue()) }
@@ -56,7 +60,7 @@ fun Entrepriseregister(modifier: Modifier = Modifier) {
         Box(
             modifier = modifier
                 .requiredWidth(width = 375.dp)
-                .requiredHeight(height = 1100.dp)
+                .requiredHeight(height = 1000.dp)
                 .background(color = Color(0xfff6f6f6))
 
         ) {
@@ -238,25 +242,29 @@ fun Entrepriseregister(modifier: Modifier = Modifier) {
                     .requiredWidth(width = 326.dp)
                     .requiredHeight(height = 64.dp)
             ) {
-                Box(
+                Button(
+                    onClick = {
+                        // Code à exécuter lorsque le bouton est cliqué (par exemple, interaction avec Firebase)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xff50c2c9)),
+
                     modifier = Modifier
                         .requiredWidth(width = 326.dp)
                         .requiredHeight(height = 64.dp)
-                        .clip(shape = RoundedCornerShape(6.dp))
-                        .background(color = Color(0xff50c2c9)))
-                Text(
-                    text = "Register",
-                    color = Color.White,
-                    lineHeight = 6.25.em,
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold),
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopCenter)
-                        .offset(
-                            x = 0.dp,
-                            y = 14.272705078125.dp
-                        ))
+
+                ) {
+                    Text(
+                        text = "Register",
+                        color = Color.White,
+                        lineHeight = 6.25.em,
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                    )
+                }
             }
             Text(
                 lineHeight = 9.sp,
@@ -285,25 +293,29 @@ fun Entrepriseregister(modifier: Modifier = Modifier) {
                     .requiredWidth(width = 207.dp)
                     .requiredHeight(height = 34.dp)
             ) {
-                Box(
+                Button(
+                    onClick = {
+                        // Code à exécuter lorsque le bouton est cliqué (par exemple, interaction avec Firebase)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xff50c2c9)),
+
                     modifier = Modifier
-                        .requiredWidth(width = 207.dp)
-                        .requiredHeight(height = 34.dp)
-                        .clip(shape = RoundedCornerShape(3.dp))
-                        .background(color = Color(0xff50c2c9)))
-                Text(
-                    text = "Anonymous ?",
-                    color = Color.White,
-                    lineHeight = 9.38.em,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium),
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 52.dp,
-                            y = 3.1817626953125.dp
-                        ))
+                        .requiredWidth(width = 250.dp)
+                        .requiredHeight(height = 45.dp)
+
+                ) {
+                    Text(
+                        text = "Anonymous ?",
+                        color = Color.White,
+                        lineHeight = 6.25.em,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                    )
+                }
             }
             Box(
                 modifier = Modifier
