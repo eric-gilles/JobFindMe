@@ -1,6 +1,8 @@
 package com.example.jobfindme.ui.screens
 
+import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -53,13 +55,15 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-@Preview
-fun UserForm(modifier: Modifier = Modifier, onSignUpClicked: (email: String, password: String) -> Unit
+fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (email: String, password: String, nationality: String,
+                                                              firstName: String, lastName: String, birthDate: LocalDate,
+                                                              city: String, phone: String) -> Unit
              ,
 ) {
     var email by remember { mutableStateOf(TextFieldValue()) }
@@ -74,6 +78,25 @@ fun UserForm(modifier: Modifier = Modifier, onSignUpClicked: (email: String, pas
     var phone by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
     var confirm by remember { mutableStateOf(TextFieldValue()) }
+    fun validateFields(): Boolean {
+        if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || firstname.text.isBlank() || lastname.text.isBlank()) {
+            Toast.makeText(
+                context,
+                "All fields must be filled.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        if (password.text != confirm.text) {
+            Toast.makeText(
+                context,
+                "Both passwords must be identical.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        return true
+    }
 
     Box(
 
@@ -356,7 +379,8 @@ fun UserForm(modifier: Modifier = Modifier, onSignUpClicked: (email: String, pas
         ) {
             Button(
                 onClick = {
-                    onSignUpClicked(email.text,password.text)
+                    if(validateFields())
+                        onSignUpClicked(email.text,password.text, nationality.text, firstname.text, lastname.text, birthdate.value, city.text, phone.text)
 
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -444,4 +468,6 @@ fun UserForm(modifier: Modifier = Modifier, onSignUpClicked: (email: String, pas
                 ))
     }
 }
+
+
 
