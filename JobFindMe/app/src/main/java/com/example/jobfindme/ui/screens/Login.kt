@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.example.jobfindme.R
+import com.example.jobfindme.ui.components.Shape
 
 @Composable
 @Preview
@@ -74,7 +75,6 @@ fun Login(modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(id = R.drawable.app_logo_rounded),
                     contentDescription = "Color logo with background 6",
-                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .align(alignment = Alignment.TopCenter)
                         .offset(x = (-0.25).dp,

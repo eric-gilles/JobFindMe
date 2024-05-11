@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -44,10 +43,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.example.jobfindme.ui.components.Shape
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
@@ -55,17 +54,21 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (email: String, password: String, nationality: String,
-                                                              firstName: String, lastName: String, birthDate: LocalDate,
-                                                              city: String, phone: String) -> Unit
-             ,
-) {
+fun UserForm(modifier: Modifier = Modifier,
+             context: Context, onSignUpClicked: (
+        email: String,
+        password: String,
+        nationality: String,
+        firstName: String,
+        lastName: String,
+        birthDate: LocalDate,
+        city: String,
+        phone: String) -> Unit) {
     var email by remember { mutableStateOf(TextFieldValue()) }
     var firstname by remember { mutableStateOf(TextFieldValue()) }
     var lastname by remember { mutableStateOf(TextFieldValue()) }
@@ -197,7 +200,7 @@ fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (
                     .align(alignment = Alignment.TopCenter)
                     .offset(
                         x = 0.dp,
-                        y = -5.dp
+                        y = (-5).dp
                     )
                     .requiredWidth(width = 246.dp)
                     .requiredHeight(height = 28.dp))

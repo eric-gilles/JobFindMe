@@ -1,19 +1,13 @@
-package com.example.jobfindme
+package com.example.jobfindme.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -33,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.example.jobfindme.R
 
 @Composable
 @Preview
@@ -54,52 +48,16 @@ fun ChooseSide(modifier: Modifier = Modifier) {
                     .requiredHeight(height = 812.dp)
                     .background(color = Color(0xfff6f6f6))
             ) {
-                Shape(
+                com.example.jobfindme.ui.components.Shape(
                     modifier = Modifier
                         .align(alignment = Alignment.TopStart)
-                        .offset(x = (-99).dp,
-                            y = (-109).dp))
-                Box(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopEnd)
-                        .offset(x = 0.dp,
-                            y = 0.dp)
-                        .requiredWidth(width = 96.dp)
-                        .requiredHeight(height = 44.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopEnd)
-                            .offset(x = (-16).dp,
-                                y = 16.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .requiredWidth(width = 20.dp)
-                                .requiredHeight(height = 16.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .align(alignment = Alignment.TopStart)
-                                    .offset(x = 15.5.dp,
-                                        y = 3.dp)
-                                    .requiredWidth(width = 4.dp)
-                                    .requiredHeight(height = 12.dp)
-                                    .clip(shape = RoundedCornerShape(1.dp))
-                                    .background(color = Color.Black.copy(alpha = 0.2f)))
-
-
-                        }
-                    }
-                }
+                        .offset(x = (-99).dp, y = (-109).dp)
+                )
             }
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
-                    .offset(x = (-0.12105560302734375).dp,
-                        y = 206.dp)
+                    .offset(x = (-0.12105560302734375).dp, y = 206.dp)
                     .requiredWidth(width = 181.dp)
                     .requiredHeight(height = 172.dp)
                     .clip(shape = RoundedCornerShape(65536.dp))
@@ -130,13 +88,12 @@ fun ChooseSide(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Bold),
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
-                    .offset(x = (-0.5).dp,
-                        y = 117.5999755859375.dp))
+                    .offset(x = (-0.5).dp, y = 117.5999755859375.dp)
+            )
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 39.dp,
-                        y = 459.dp)
+                    .offset(x = 39.dp, y = 459.dp)
                     .requiredWidth(width = 296.dp)
                     .requiredHeight(height = 51.dp)
             ) {

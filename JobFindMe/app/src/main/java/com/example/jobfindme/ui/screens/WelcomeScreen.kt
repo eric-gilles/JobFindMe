@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.times
 import com.example.jobfindme.R
 
 @Composable
-@Preview
 fun Welcome(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier

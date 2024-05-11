@@ -1,7 +1,6 @@
 package com.example.jobfindme
 
 import android.content.ContentValues.TAG
-import android.icu.util.LocaleData
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,22 +11,18 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.jobfindme.ui.components.WelcomeComponent
-import com.example.jobfindme.ui.screens.Login
 import com.example.jobfindme.ui.screens.UserForm
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
 
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,18 +57,18 @@ class MainActivity : ComponentActivity() {
                     if (user!=null){
                         Log.d(TAG,"Created user id "+ user.uid)
                         onComplete(user.uid, user.email.toString())
-
                     }
                     updateUI(user)
                 } else {
-                    task.exception?.message?.let { Log.e(TAG, "Error ! "+it) }
+                    task.exception?.message?.let { Log.e(TAG, "Error ! $it") }
                     Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
     }
 
-    private fun createUser(uid: String, email: String, firstName: String, lastName: String, nationality: String, birthDate: LocalDate, city: String, phone: String){
+    private fun createUser(uid: String, email: String, firstName: String, lastName: String,
+                           nationality: String, birthDate: LocalDate, city: String, phone: String){
         val userData = hashMapOf(
                             "email" to email,
                             "firstName" to firstName,
@@ -83,7 +78,7 @@ class MainActivity : ComponentActivity() {
                             "city" to city,
                             "phone" to phone,
                         )
-        Log.d(TAG,"User id "+ uid)
+        Log.d(TAG, "User id $uid")
 
         db.collection("Users").document(uid)
             .set(userData)
@@ -102,14 +97,13 @@ class MainActivity : ComponentActivity() {
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
-
-                    Toast.makeText(this, "Authentication failed: "+ (task.exception?.message
-                        ?: String), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Authentication failed: "+ (task.exception?.message?: String), Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
 
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     @Preview
@@ -118,6 +112,7 @@ class MainActivity : ComponentActivity() {
             createAccount(email, password) { uid, email ->
                 createUser(uid, email, firstName, lastName, nationality, birthDate, city, phone)
             }
-        })    }
+        })
+    }
 }
 
