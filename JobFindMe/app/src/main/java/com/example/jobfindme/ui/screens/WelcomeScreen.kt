@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.times
 import androidx.navigation.NavHostController
 
 import com.example.jobfindme.R
+import com.example.jobfindme.ui.components.Shape
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable

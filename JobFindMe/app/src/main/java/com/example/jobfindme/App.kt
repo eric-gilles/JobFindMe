@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.jobfindme.ui.screens.AccueilProfile
+import com.example.jobfindme.ui.screens.ChooseSide
+import com.example.jobfindme.ui.screens.EmployerForm
 import com.example.jobfindme.ui.screens.ErrorGPS
 import com.example.jobfindme.ui.screens.Login
 import com.example.jobfindme.ui.screens.UserForm
