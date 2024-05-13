@@ -44,11 +44,13 @@ import androidx.compose.ui.unit.Constraints.Companion.Infinity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 
 @Composable
 @Preview
-fun Entrepriseregister(modifier: Modifier = Modifier) {
+fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore) {
     var companyName by remember { mutableStateOf(TextFieldValue()) }
     var companyAddress by remember { mutableStateOf(TextFieldValue()) }
     var email by remember { mutableStateOf(TextFieldValue()) }

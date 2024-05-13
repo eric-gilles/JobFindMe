@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
+@Preview
 fun CrossedCircles(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -25,7 +26,7 @@ fun CrossedCircles(modifier: Modifier = Modifier) {
     }
 }
 
-
+@Preview
 @Composable
 fun Shape(modifier: Modifier = Modifier) {
     Box(

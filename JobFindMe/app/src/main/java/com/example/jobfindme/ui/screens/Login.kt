@@ -39,11 +39,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.jobfindme.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 @Preview
-fun Login(modifier: Modifier = Modifier) {
+fun Login( modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth) {
     var email by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
 

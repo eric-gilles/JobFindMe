@@ -24,11 +24,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.jobfindme.R
 
 @Composable
 @Preview
-fun ErrorGPS(modifier: Modifier = Modifier) {
+fun ErrorGPS(modifier: Modifier = Modifier, navController: NavHostController) {
     Box(
         modifier = modifier
             .requiredWidth(width = 375.dp)
@@ -113,10 +114,4 @@ fun Shape(modifier: Modifier = Modifier) {
                 .clip(shape = CircleShape)
                 .background(color = Color(0xff6ae0d9).copy(alpha = 0.49f)))
     }
-}
-
-@Preview(widthDp = 375, heightDp = 812)
-@Composable
-private fun ErrorGPSPreview() {
-    ErrorGPS(Modifier)
 }

@@ -1,7 +1,9 @@
 package com.example.jobfindme.ui.screens
 
+import android.content.ContentValues
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -35,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -48,6 +51,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
@@ -61,11 +67,8 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (email: String, password: String, nationality: String,
-                                                              firstName: String, lastName: String, birthDate: LocalDate,
-                                                              city: String, phone: String) -> Unit
-             ,
-) {
+fun UserForm(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth) {
+
     var email by remember { mutableStateOf(TextFieldValue()) }
     var firstname by remember { mutableStateOf(TextFieldValue()) }
     var lastname by remember { mutableStateOf(TextFieldValue()) }
@@ -78,6 +81,8 @@ fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (
     var phone by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
     var confirm by remember { mutableStateOf(TextFieldValue()) }
+    val context: Context = LocalContext.current
+
     fun validateFields(): Boolean {
         if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || firstname.text.isBlank() || lastname.text.isBlank()) {
             Toast.makeText(
@@ -97,6 +102,36 @@ fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (
         }
         return true
     }
+
+    fun createUserAndAuthenticate() {
+        if (validateFields()) {
+            firebaseAuth.createUserWithEmailAndPassword(email.text, password.text)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+
+                        val user = firebaseAuth.currentUser
+                        val userDocument = firestore.collection("Users").document(user?.uid ?: "")
+                        val userData = hashMapOf(
+                            "firstname" to firstname.text,
+                            "lastname" to lastname.text
+                        )
+                        userDocument.set(userData)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "User registered successfully", Toast.LENGTH_SHORT).show()
+
+                                navController.navigate("WelcomePage")
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
+
+
 
     Box(
 
@@ -259,10 +294,10 @@ fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
                 TextField(
-                    modifier = Modifier.clickable { //Click event
+                    modifier = Modifier.clickable {
                         open.value = true
                     },
-                    enabled = false,// <- Add this to make click event work
+                    enabled = false,
                     value = birthdate.value.format(DateTimeFormatter.ISO_DATE) ,
                     onValueChange = {},
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -379,8 +414,7 @@ fun UserForm(modifier: Modifier = Modifier, context: Context, onSignUpClicked: (
         ) {
             Button(
                 onClick = {
-                    if(validateFields())
-                        onSignUpClicked(email.text,password.text, nationality.text, firstname.text, lastname.text, birthdate.value, city.text, phone.text)
+                    createUserAndAuthenticate()
 
                 },
                 colors = ButtonDefaults.buttonColors(

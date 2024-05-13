@@ -4,11 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,39 +30,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
+import androidx.navigation.NavHostController
+
 import com.example.jobfindme.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 @Preview
-fun Welcome(modifier: Modifier = Modifier) {
+fun Welcome(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    firebaseAuth: FirebaseAuth,) {
+    val context = LocalContext.current
+
     Box(
         modifier = modifier
             .requiredWidth(width = 375.dp)
             .requiredHeight(height = 812.dp)
+            .background(color = Color(0xfff6f6f6))
     ) {
+
         Box(
             modifier = Modifier
-                .requiredWidth(width = 375.dp)
-                .requiredHeight(height = 812.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredWidth(width = 375.dp)
-                    .requiredHeight(height = 812.dp)
-                    .background(color = Color(0xfff6f6f6))
+                .align(alignment = Alignment.TopStart)
+                .offset(x = (-99).dp, y = (-109).dp)
+                .requiredWidth(width = 290.dp)
+                .requiredHeight(height = 270.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(x = (-99).dp, y = (-109).dp)
-                        .requiredWidth(width = 290.dp)
-                        .requiredHeight(height = 270.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(shape = CircleShape)
-                            .background(color = Color(0xff6ae0d9).copy(alpha = 0.49f)))
+                Shape()
                 }
                 Box(
                     modifier = Modifier
@@ -71,14 +68,20 @@ fun Welcome(modifier: Modifier = Modifier) {
                 ) {
                     Button(
                         onClick = {
-                            // Code à exécuter lorsque le bouton est cliqué (par exemple, interaction avec Firebase)
+                            if (firebaseAuth.currentUser == null){
+                                navController.navigate("Choose")
+                            } else {
+                                navController.navigate("Accueil")
+                            }
+
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xff50c2c9)),
 
                         modifier = Modifier
                             .requiredWidth(width = 326.dp)
-                            .requiredHeight(height = 64.dp)
+                            .requiredHeight(height = 64.dp),
+
                     ){
                         Text(
                             text = "Get Started",
@@ -96,34 +99,35 @@ fun Welcome(modifier: Modifier = Modifier) {
                     text = "Welcome on JobFindMe !",
                     color = Color.Black.copy(alpha = 0.74f),
                     lineHeight = 6.25.em,
-                    style = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Bold),
+                    style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .align(alignment = Alignment.TopCenter)
                         .offset(x = 5.dp, y = 160.dp))
 
-                val textLines = listOf(
-                    "Discover thousands of job opportunities and talents.",
-                    "Create your profile, explore opportunities",
-                    "and start building your future today.",
-                    "Join our dynamic community to find the perfect match",
-                    "for your career or business."
-                )
-                textLines.forEachIndexed { index, line ->
-                    Text(
-                        text = line,
-                        color = Color.Black.copy(alpha = 0.74f),
-                        textAlign = TextAlign.Center,
-                        lineHeight = 10.55.em,
+        val textLines = listOf(
+            "Discover thousands of job opportunities and talents.",
+            "Create your profile, explore opportunities",
+            "and start building your future today.",
+            "Join our dynamic community to find the perfect match",
+            "for your career or business."
+        )
+        textLines.forEachIndexed { index, line ->
+            Text(
+                text = line,
+                color = Color.Black.copy(alpha = 0.74f),
+                textAlign = TextAlign.Center,
+                lineHeight = 12.em,
+                style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopCenter)
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+                    .offset(y = 436.dp + index * 30.dp)
+            )
+        }
 
-                        style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold),
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopCenter)
-                            .offset(x = (-0.5).dp, y = 406.dp + index * 30.dp)
-                            .requiredWidth(width = 364.dp)
-                    )
-                }
 
-                Image(
+        Image(
                     painter = painterResource(id = R.drawable.app_logo_rounded),
                     contentDescription = "Application Logo",
                     contentScale = ContentScale.Crop,
@@ -134,12 +138,8 @@ fun Welcome(modifier: Modifier = Modifier) {
                         .requiredHeight(height = 193.dp)
                         .clip(shape = RoundedCornerShape(65536.dp)))
             }
-        }
-    }
+
+
 }
 
-@Preview
-@Composable
-private fun WelcomePreview() {
-    Welcome(Modifier)
-}
+
