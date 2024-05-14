@@ -18,17 +18,17 @@ import java.time.LocalDate
 @Composable
 @Preview
 fun CustomDatePicker() {
-    val selectedDate = remember { mutableStateOf(LocalDate.now()) }
-    CalendarDialog(
-        state = rememberUseCaseState(visible = true, true, onCloseRequest = { } ),
-        config = CalendarConfig(
-            yearSelection = true,
-            style = CalendarStyle.MONTH,
-        ),
-        selection = CalendarSelection.Date(
-            selectedDate = selectedDate.value
-        ) { newDate ->
-            selectedDate.value = newDate
-        },
-    )
+  val selectedDate = remember { mutableStateOf(LocalDate.now()) }
+  CalendarDialog(
+    state = rememberUseCaseState(visible = true, true, onCloseRequest = { } ),
+    config = CalendarConfig(
+      yearSelection = true,
+      style = CalendarStyle.MONTH,
+    ),
+    selection = CalendarSelection.Date(
+      selectedDate = selectedDate.value
+    ) { newDate ->
+      selectedDate.value = newDate
+    },
+  )
 }

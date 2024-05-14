@@ -1,7 +1,9 @@
 package com.example.jobfindme.ui.components
 
 import android.content.ContentValues
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.material3.Text
 
 import androidx.compose.foundation.BorderStroke
@@ -30,12 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.jobfindme.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -43,31 +47,36 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun WelcomeComponent(
   modifier: Modifier = Modifier,
+  navController: NavController,
   firebaseAuth: FirebaseAuth,
   firestore: FirebaseFirestore,
 ) {
   var fullName by remember { mutableStateOf("") }
   val currentUser = firebaseAuth.currentUser
+  val context : Context = LocalContext.current
   if (currentUser != null) {
     val uid = currentUser.uid
-    val firestore = FirebaseFirestore.getInstance()
+
     val userDocRef = firestore.collection("Users").document(uid)
 
     LaunchedEffect(uid) {
       userDocRef.get().addOnSuccessListener { document ->
         if (document != null) {
-          val firstName = document.getString("firstName")
-          val lastName = document.getString("lastName")
-          Log.d(ContentValues.TAG, "Nom de fou: "+document.getString("firstName"))
-          Log.d(ContentValues.TAG, "Prenom de fou: "+document.getString("lastName"))
+          val firstName = document.getString("firstname")
+          val lastName = document.getString("lastname")
+          Log.d(ContentValues.TAG, "Nom de fou: "+document.getString("firstname"))
+          Log.d(ContentValues.TAG, "Prenom de fou: "+document.getString("lastname"))
 
           if (firstName != null && lastName != null) {
             fullName = "$firstName $lastName"
+          } else {
+            Toast.makeText(context, firstName.toString(),Toast.LENGTH_SHORT).show()
+
           }
         }
       }.addOnFailureListener { exception ->
-        fullName = " erreur erreur"
-
+        Toast.makeText(context, exception.toString(),Toast.LENGTH_SHORT).show()
+        navController.navigate("WelcomePage")
       }
     }
   }
@@ -79,12 +88,12 @@ fun WelcomeComponent(
     ) {
       Box(
         modifier = Modifier
-          .fillMaxSize() // RemLplir toute la taille disponible
+          .fillMaxSize()
           .background(color = Color(0xfff6f6f6))
       ) {
         Box(
           modifier = Modifier
-            .fillMaxWidth() // Remplir toute la largeur disponible
+            .fillMaxWidth()
             .requiredHeight(height = 307.dp)
             .background(color = Color(0xff50c2c9))
         )

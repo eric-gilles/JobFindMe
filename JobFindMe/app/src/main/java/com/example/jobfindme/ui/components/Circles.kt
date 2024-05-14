@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 @Preview
 fun CrossedCircles(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize()) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawCircle(Color(0xff6ae0d9), radius = 100.dp.toPx(), center = Offset(100f, 180f))
-            drawCircle(Color(0xff6ae0d9), radius = 100.dp.toPx(), center = Offset(180f, 100f))
-        }
+  Box(modifier = modifier.fillMaxSize()) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+      drawCircle(Color(0xff6ae0d9), radius = 100.dp.toPx(), center = Offset(100f, 180f))
+      drawCircle(Color(0xff6ae0d9), radius = 100.dp.toPx(), center = Offset(180f, 100f))
     }
+  }
 
 }
 
@@ -26,11 +26,11 @@ fun CrossedCircles(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun ShapePreview() {
-    Shape(Modifier)
+  Shape(Modifier)
 }
 
 @Preview
 @Composable
 private fun SplashPreview() {
-    CrossedCircles(Modifier)
+  CrossedCircles(Modifier)
 }

@@ -2,19 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ChooseSide">
-        <State />
-      </entry>
-      <entry key="Entrepriseregister">
-        <State />
-      </entry>
-      <entry key="FirebaseActivity">
-        <State />
-      </entry>
-      <entry key="LoginForm">
-        <State />
-      </entry>
-      <entry key="UserForm">
+      <entry key="EmployerForm">
         <State />
       </entry>
       <entry key="app">

@@ -15,20 +15,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Shape(modifier: Modifier = Modifier) {
+  Box(
+    modifier = modifier
+      .requiredWidth(width = 290.dp)
+      .requiredHeight(height = 270.dp)
+  ) {
     Box(
-        modifier = modifier
-            .requiredWidth(width = 290.dp)
-            .requiredHeight(height = 270.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(shape = CircleShape)
-                .background(color = Color(0xff6ae0d9).copy(alpha = 0.49f)))
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(shape = CircleShape)
-                .background(color = Color(0xff6ae0d9).copy(alpha = 0.49f)))
-    }
+      modifier = Modifier
+        .fillMaxSize()
+        .clip(shape = CircleShape)
+        .background(color = Color(0xff6ae0d9).copy(alpha = 0.49f)))
+    Box(
+      modifier = Modifier
+        .fillMaxSize()
+        .clip(shape = CircleShape)
+        .background(color = Color(0xff6ae0d9).copy(alpha = 0.49f)))
+  }
 }

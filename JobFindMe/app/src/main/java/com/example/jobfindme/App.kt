@@ -25,8 +25,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
   val navController = rememberNavController()
 
   NavHost(navController, startDestination = "WelcomePage") {
-    composable("Login") {
-      Login(navController = navController, firebaseAuth = firebaseAuth)
+    composable("Signin") {
+      Login(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
     composable("Signup/user") {
       UserForm(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth)
@@ -45,6 +45,10 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
     }
     composable("ErrorGPS"){
       ErrorGPS(navController = navController)
+    }
+    composable("Signout") {
+      firebaseAuth.signOut()
+      ChooseSide(navController = navController)
     }
   }
 }

@@ -28,69 +28,69 @@ import com.example.jobfindme.ui.components.Shape
 // Function to display the UI for an error with GPS connection
 @Composable
 fun ErrorGPS(modifier: Modifier = Modifier, navController: NavHostController) {
+  Box(
+    modifier = modifier
+      .requiredWidth(width = 375.dp)
+      .requiredHeight(height = 812.dp)
+  ) {
+    // Main content Box
     Box(
-        modifier = modifier
-            .requiredWidth(width = 375.dp)
-            .requiredHeight(height = 812.dp)
+      modifier = Modifier
+        .requiredWidth(width = 375.dp)
+        .requiredHeight(height = 812.dp)
     ) {
-        // Main content Box
-        Box(
-            modifier = Modifier
-                .requiredWidth(width = 375.dp)
-                .requiredHeight(height = 812.dp)
+      // Background Box
+      Box(
+        modifier = Modifier
+          .requiredWidth(width = 375.dp)
+          .requiredHeight(height = 812.dp)
+          .background(color = Color(0xfff6f6f6))
+      ) {
+        // Display the shape (Circle)
+        Shape(
+          modifier = Modifier
+            .align(alignment = Alignment.TopStart)
+            .offset(x = (-99).dp, y = (-109).dp)
+        )
+      }
+      // Image with error GPS icon
+      Image(
+        painter = painterResource(id = R.drawable.error_gps),
+        contentDescription = "No GPS Location",
+        modifier = Modifier
+          .align(alignment = Alignment.TopStart)
+          .offset(x = 11.dp, y = 175.448974609375.dp)
+          .requiredSize(size = 352.dp))
+      // Column to hold the 2 texts
+      Column(
+        verticalArrangement = Arrangement.spacedBy(52.dp, Alignment.Top),
+        modifier = Modifier
+          .align(alignment = Alignment.TopCenter)
+          .offset(x = 0.dp, y = 570.dp)
+      ) {
+        Column(
+          verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+          horizontalAlignment = Alignment.CenterHorizontally,
+          modifier = Modifier.requiredWidth(width = 327.dp)
         ) {
-            // Background Box
-            Box(
-                modifier = Modifier
-                    .requiredWidth(width = 375.dp)
-                    .requiredHeight(height = 812.dp)
-                    .background(color = Color(0xfff6f6f6))
-            ) {
-                // Display the shape (Circle)
-                Shape(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(x = (-99).dp, y = (-109).dp)
-                )
-            }
-            // Image with error GPS icon
-            Image(
-                painter = painterResource(id = R.drawable.error_gps),
-                contentDescription = "No GPS Location",
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 11.dp, y = 175.448974609375.dp)
-                    .requiredSize(size = 352.dp))
-            // Column to hold the 2 texts
-            Column(
-                verticalArrangement = Arrangement.spacedBy(52.dp, Alignment.Top),
-                modifier = Modifier
-                    .align(alignment = Alignment.TopCenter)
-                    .offset(x = 0.dp, y = 570.dp)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.requiredWidth(width = 327.dp)
-                ) {
-                    // Main Text
-                    Text(
-                        text = "No GPS Connection",
-                        color = Color(0xff303030),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold),
-                        modifier = Modifier.requiredWidth(width = 230.dp))
-                    Text(
-                        text = "Please check for location permission",
-                        color = Color(0xff4a4a4a),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(fontSize = 16.sp),
-                        modifier = Modifier.requiredWidth(width = 325.dp))
-                }
-            }
+          // Main Text
+          Text(
+            text = "No GPS Connection",
+            color = Color(0xff303030),
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+              fontSize = 24.sp,
+              fontWeight = FontWeight.Bold),
+            modifier = Modifier.requiredWidth(width = 230.dp))
+          Text(
+            text = "Please check for location permission",
+            color = Color(0xff4a4a4a),
+            textAlign = TextAlign.Center,
+            style = TextStyle(fontSize = 16.sp),
+            modifier = Modifier.requiredWidth(width = 325.dp))
         }
+      }
     }
+  }
 }
 
