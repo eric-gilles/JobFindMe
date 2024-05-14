@@ -64,14 +64,23 @@ fun WelcomeComponent(
         if (document != null) {
           val firstName = document.getString("firstname")
           val lastName = document.getString("lastname")
-          Log.d(ContentValues.TAG, "Nom de fou: "+document.getString("firstname"))
-          Log.d(ContentValues.TAG, "Prenom de fou: "+document.getString("lastname"))
 
           if (firstName != null && lastName != null) {
             fullName = "$firstName $lastName"
-          } else {
-            Toast.makeText(context, firstName.toString(),Toast.LENGTH_SHORT).show()
-
+          }
+        }
+      }.addOnFailureListener { exception ->
+        Toast.makeText(context, exception.toString(),Toast.LENGTH_SHORT).show()
+        navController.navigate("WelcomePage")
+      }
+    }
+    val employerDocRef = firestore.collection("Employers").document(uid)
+    LaunchedEffect(uid) {
+      employerDocRef.get().addOnSuccessListener { document ->
+        if (document != null) {
+          val companyName = document.getString("name")
+          if (companyName != null ) {
+            fullName = companyName
           }
         }
       }.addOnFailureListener { exception ->

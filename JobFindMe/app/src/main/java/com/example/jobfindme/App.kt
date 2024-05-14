@@ -35,20 +35,28 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       ChooseSide(navController = navController)
     }
     composable("Signup/employer"){
-      EmployerForm(navController = navController, firestore = firestore)
+      EmployerForm(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
     composable("WelcomePage"){
       Welcome(navController = navController, firebaseAuth = firebaseAuth)
     }
     composable("Accueil"){
-      AccueilProfile(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
+      if (firebaseAuth.currentUser != null) {
+        AccueilProfile(
+          navController = navController,
+          firebaseAuth = firebaseAuth,
+          firestore = firestore
+        )
+      } else {
+        navController.navigate("Choose")
+      }
     }
     composable("ErrorGPS"){
       ErrorGPS(navController = navController)
     }
     composable("Signout") {
       firebaseAuth.signOut()
-      ChooseSide(navController = navController)
+      navController.navigate("Choose")
     }
   }
 }

@@ -110,8 +110,13 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
             val user = firebaseAuth.currentUser
             val userDocument = firestore.collection("Users").document(user?.uid ?: "")
             val userData = hashMapOf(
+              "email" to email.text,
               "firstname" to firstname.text,
-              "lastname" to lastname.text
+              "lastname" to lastname.text,
+              "nationality" to nationality.text,
+              "phone" to phone.text,
+              "city" to city.text,
+              "birthdate" to birthdate.value
             )
             userDocument.set(userData)
               .addOnSuccessListener {
@@ -248,6 +253,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         OutlinedTextField(
+          singleLine = true,
           value = email,
           onValueChange = { email = it },
           label = {
@@ -263,6 +269,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         )
 
         OutlinedTextField(
+          singleLine = true,
           value = firstname,
           onValueChange = { firstname = it },
           label = {
@@ -278,6 +285,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         )
 
         OutlinedTextField(
+          singleLine = true,
           value = lastname,
           onValueChange = { lastname = it },
 
@@ -323,6 +331,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         }
 
         OutlinedTextField(
+          singleLine = true,
           value = nationality,
           onValueChange = { nationality = it },
           label = {
@@ -337,6 +346,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           modifier = Modifier.padding(vertical = 4.dp)
         )
         OutlinedTextField(
+          singleLine = true,
           value = city,
           onValueChange = { city = it },
           label = {
@@ -352,6 +362,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         )
 
         OutlinedTextField(
+          singleLine = true,
           value = phone,
           onValueChange = { phone = it },
           label = {
@@ -367,6 +378,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         )
 
         OutlinedTextField(
+          singleLine = true,
           value = password,
           onValueChange = { password = it },
           visualTransformation = PasswordVisualTransformation(),
@@ -383,6 +395,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         )
 
         OutlinedTextField(
+          singleLine = true,
           value = confirm,
           onValueChange = { confirm = it },
           visualTransformation = PasswordVisualTransformation(),

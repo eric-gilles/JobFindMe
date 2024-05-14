@@ -25,12 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.R
+import com.example.jobfindme.ui.components.Shape
 
 
 @Composable
@@ -56,7 +56,7 @@ fun ChooseSide(
           .requiredHeight(height = 812.dp)
           .background(color = Color(0xfff6f6f6))
       ) {
-        com.example.jobfindme.ui.components.Shape(
+        Shape(
           modifier = Modifier
             .align(alignment = Alignment.TopStart)
             .offset(x = (-99).dp, y = (-109).dp)

@@ -1,6 +1,10 @@
 package com.example.jobfindme.ui.screens
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.jobfindme.ui.components.LogoutButton
 import com.example.jobfindme.ui.components.WelcomeComponent
@@ -13,6 +17,7 @@ fun AccueilProfile(
   firebaseAuth: FirebaseAuth,
   firestore: FirebaseFirestore
 ){
-  LogoutButton(navController = navController, firebaseAuth = firebaseAuth)
   WelcomeComponent(navController= navController, firebaseAuth = firebaseAuth, firestore = firestore)
+  LogoutButton(navController = navController)
+
 }

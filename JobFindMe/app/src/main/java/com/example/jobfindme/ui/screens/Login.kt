@@ -62,8 +62,13 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
         if (task.isSuccessful){
           navController.navigate("Accueil")
         } else {
-          Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
+          //Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
         }
+      }
+      .addOnFailureListener { exception ->
+//        Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
+        Toast.makeText(context,exception.toString(),Toast.LENGTH_LONG).show()
+
       }
   }
   Box(
@@ -95,7 +100,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           modifier = Modifier
             .align(alignment = Alignment.TopCenter)
             .offset(x = (-0.25).dp,
-              y = 200.dp)
+              y = 150.dp)
             .requiredWidth(width = 203.dp)
             .requiredHeight(height = 193.dp)
             .clip(shape = RoundedCornerShape(65536.dp)))
@@ -114,12 +119,12 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           .align(alignment = Alignment.TopCenter)
           .offset(
             x = 0.dp,
-            y = 149.5999755859375.dp
+            y = 100.dp
           ))
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(x = 0.dp, y = 400.dp)
+          .offset(x = 0.dp, y = 350.dp)
           .requiredWidth(width = 375.dp)
           .requiredHeight(height = 250.dp)
 
@@ -129,6 +134,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           OutlinedTextField(
+            singleLine = true,
             value = email,
             onValueChange = { email = it },
             label = {
@@ -143,6 +149,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
             modifier = Modifier.padding(vertical = 4.dp)
           )
           OutlinedTextField(
+            singleLine = true,
             value = password,
             onValueChange = { password = it },
             visualTransformation = PasswordVisualTransformation(),
@@ -172,7 +179,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           .align(alignment = Alignment.TopCenter)
           .offset(
             x = 0.dp,
-            y = 580.dp
+            y = 530.dp
           ).clickable {
             Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
           })
@@ -193,7 +200,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           .align(alignment = Alignment.TopCenter)
           .offset(
             x = 0.dp,
-            y = 700.dp
+            y = 650.dp
           )
           .clickable { navController.navigate("Choose") })
       Box(
@@ -201,7 +208,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           .align(alignment = Alignment.TopStart)
           .offset(
             x = 24.dp,
-            y = 620.dp
+            y = 570.dp
           )
           .requiredWidth(width = 326.dp)
           .requiredHeight(height = 64.dp)
@@ -237,7 +244,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           .align(alignment = Alignment.TopStart)
           .offset(
             x = 84.dp,
-            y = 750.dp
+            y = 700.dp
           )
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)

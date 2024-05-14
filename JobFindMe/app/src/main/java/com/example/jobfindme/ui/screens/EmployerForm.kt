@@ -46,19 +46,70 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.ui.components.Shape
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 @Composable
-fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore) {
+fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
   var companyName by remember { mutableStateOf(TextFieldValue()) }
   var companyAddress by remember { mutableStateOf(TextFieldValue()) }
   var email by remember { mutableStateOf(TextFieldValue()) }
   var phone by remember { mutableStateOf(TextFieldValue()) }
 
   var password by remember { mutableStateOf(TextFieldValue()) }
-  var confirmPassword by remember { mutableStateOf(TextFieldValue()) }
+  var confirm by remember { mutableStateOf(TextFieldValue()) }
   val context : Context = LocalContext.current
+
+  fun validateFields(): Boolean {
+    if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || companyAddress.text.isBlank() || companyName.text.isBlank() || phone.text.isBlank()) {
+      Toast.makeText(
+        context,
+        "All fields must be filled.",
+        Toast.LENGTH_SHORT
+      ).show()
+      return false
+    }
+    if (password.text != confirm.text) {
+      Toast.makeText(
+        context,
+        "Both passwords must be identical.",
+        Toast.LENGTH_SHORT
+      ).show()
+      return false
+    }
+    return true
+  }
+
+  fun createUserAndAuthenticate() {
+    if (validateFields()) {
+      firebaseAuth.createUserWithEmailAndPassword(email.text, password.text)
+        .addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+
+            val user = firebaseAuth.currentUser
+            val employerDocument = firestore.collection("Employers").document(user?.uid ?: "")
+            val employerData = hashMapOf(
+              "email" to email.text,
+              "name" to companyName.text,
+              "address" to companyAddress.text,
+              "phone" to phone.text,
+            )
+            employerDocument.set(employerData)
+              .addOnSuccessListener {
+                Toast.makeText(context, "User registered successfully", Toast.LENGTH_SHORT).show()
+
+                navController.navigate("WelcomePage")
+              }
+              .addOnFailureListener { e ->
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+              }
+          } else {
+            Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+          }
+        }
+    }
+  }
   Box(modifier = modifier.verticalScroll(rememberScrollState())){
     Box(
       modifier = modifier
@@ -86,7 +137,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           .align(alignment = Alignment.TopStart)
           .offset(
             x = 62.dp,
-            y = 130.dp
+            y = 100.dp
           )
           .requiredWidth(width = 250.dp)
           .requiredHeight(height = 150.dp)
@@ -141,7 +192,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           .align(alignment = Alignment.TopStart)
           .offset(
             x = 38.dp,
-            y = 250.dp
+            y = 220.dp
           )
           .requiredWidth(width = 298.dp)
           .requiredHeight(height = 700.dp)
@@ -159,9 +210,11 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
                 fontSize = 14.sp
               )
             },
+
             textStyle = TextStyle(
               fontSize = 14.sp
             ),
+            singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
           )
           OutlinedTextField(
@@ -176,6 +229,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             textStyle = TextStyle(
               fontSize = 14.sp
             ),
+            singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
           )
           OutlinedTextField(
@@ -187,6 +241,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
                 fontSize = 14.sp
               )
             },
+            singleLine = true,
             textStyle = TextStyle(
               fontSize = 14.sp
             ),
@@ -205,7 +260,9 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             textStyle = TextStyle(
               fontSize = 14.sp
             ),
+            singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
+
           )
           OutlinedTextField(
             value = password,
@@ -220,11 +277,12 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             textStyle = TextStyle(
               fontSize = 14.sp
             ),
+            singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
           )
           OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            value = confirm,
+            onValueChange = { confirm = it },
             visualTransformation = PasswordVisualTransformation(),
             label = {
               Text(
@@ -235,7 +293,9 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             textStyle = TextStyle(
               fontSize = 14.sp
             ),
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            singleLine = true,
+
           )
         }
       }
@@ -244,14 +304,14 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           .align(alignment = Alignment.TopStart)
           .offset(
             x = 24.dp,
-            y = 750.dp
+            y = 730.dp
           )
           .requiredWidth(width = 326.dp)
           .requiredHeight(height = 64.dp)
       ) {
         Button(
           onClick = {
-            Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+            createUserAndAuthenticate()
           },
           colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xff50c2c9)),
@@ -290,7 +350,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           .align(alignment = Alignment.TopCenter)
           .offset(
             x = (-0.5).dp,
-            y = 850.dp
+            y = 820.dp
           )
           .clickable { navController.navigate("Signin") }
 
@@ -300,7 +360,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           .align(alignment = Alignment.TopStart)
           .offset(
             x = 84.dp,
-            y = 900.dp
+            y = 870.dp
           )
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)
