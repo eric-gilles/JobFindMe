@@ -181,7 +181,19 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
             x = 0.dp,
             y = 530.dp
           ).clickable {
-            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
+            if (email.text.isBlank()){
+              Toast.makeText(context,"Please fill atleast your email", Toast.LENGTH_LONG).show()
+              return@clickable
+            }
+            firebaseAuth.sendPasswordResetEmail(email.text).addOnCompleteListener { task ->
+              if(task.isSuccessful){
+                Toast.makeText(context,"Email send to "+email.text, Toast.LENGTH_LONG).show()
+                return@addOnCompleteListener
+              }
+            }.addOnFailureListener{ exception ->
+              Toast.makeText(context,"Email incorrect", Toast.LENGTH_LONG).show()
+              return@addOnFailureListener
+            }
           })
 
       Text(
@@ -251,7 +263,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
       ) {
         Button(
           onClick = {
-            Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+            navController.navigate("Signin/anonymous")
           },
           colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xff50c2c9)),

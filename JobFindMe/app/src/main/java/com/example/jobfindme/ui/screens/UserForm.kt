@@ -480,7 +480,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
     ) {
       Button(
         onClick = {
-          Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+          navController.navigate("Signin/anonymous")
         },
         colors = ButtonDefaults.buttonColors(
           containerColor = Color(0xff50c2c9)),

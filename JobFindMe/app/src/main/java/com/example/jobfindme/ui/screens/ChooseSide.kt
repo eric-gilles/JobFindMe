@@ -31,12 +31,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.R
 import com.example.jobfindme.ui.components.Shape
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
 fun ChooseSide(
   modifier: Modifier = Modifier,
-  navController: NavController
+  navController: NavController,
 ) {
   val context : Context = LocalContext.current
   Box(
@@ -160,7 +161,7 @@ fun ChooseSide(
       }
       Button(
         onClick = {
-          Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
+          navController.navigate("Signin/anonymous")
         },
         colors = ButtonDefaults.buttonColors(
           containerColor = Color(0xff50c2c9)),

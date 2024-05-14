@@ -28,6 +28,10 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
     composable("Signin") {
       Login(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
+    composable("Signin/anonymous") {
+      firebaseAuth.signInAnonymously()
+      //redirige vers les offres pour les anonymes
+    }
     composable("Signup/user") {
       UserForm(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth)
     }
