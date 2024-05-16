@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -40,10 +41,12 @@ fun ChooseSide(
   navController: NavController,
 ) {
   val context : Context = LocalContext.current
+  val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
   Box(
     modifier = modifier
       .requiredHeight(height = 812.dp)
-      .requiredWidth(width = 375.dp)
+      .requiredWidth(width = screenWidth)
 
   ) {
     Box(

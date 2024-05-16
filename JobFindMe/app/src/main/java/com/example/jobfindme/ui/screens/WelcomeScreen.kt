@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -41,49 +42,47 @@ import com.google.firebase.auth.FirebaseAuth
 fun Welcome(
   modifier: Modifier = Modifier,
   navController: NavHostController,
-  firebaseAuth: FirebaseAuth,) {
-  val context = LocalContext.current
+  firebaseAuth: FirebaseAuth,
+) {
 
   Box(
     modifier = modifier
-      .requiredWidth(width = 375.dp)
-      .requiredHeight(height = 812.dp)
+      .fillMaxSize()
       .background(color = Color(0xfff6f6f6))
   ) {
 
     Box(
       modifier = Modifier
         .align(alignment = Alignment.TopStart)
-        .offset(x = (-99).dp, y = (-109).dp)
-        .requiredWidth(width = 290.dp)
-        .requiredHeight(height = 270.dp)
+        .offset(x = -99.dp, y = -109.dp)
+        .requiredWidth(290.dp)
+        .requiredHeight(270.dp)
     ) {
       Shape()
     }
+
     Box(
       modifier = Modifier
         .align(alignment = Alignment.TopCenter)
         .offset(y = 656.dp)
-        .requiredWidth(width = 325.dp)
-        .requiredHeight(height = 62.dp)
+        .requiredWidth(325.dp)
+        .requiredHeight(62.dp)
     ) {
       Button(
         onClick = {
-          if (firebaseAuth.currentUser == null){
+          if (firebaseAuth.currentUser == null) {
             navController.navigate("Choose")
           } else {
-            navController.navigate("Accueil")
+            navController.navigate("Home")
           }
-
         },
         colors = ButtonDefaults.buttonColors(
-          containerColor = Color(0xff50c2c9)),
-
+          containerColor = Color(0xff50c2c9)
+        ),
         modifier = Modifier
-          .requiredWidth(width = 326.dp)
-          .requiredHeight(height = 64.dp),
-
-        ){
+          .requiredWidth(326.dp)
+          .requiredHeight(64.dp),
+      ) {
         Text(
           text = "Get Started",
           color = Color.White,
@@ -96,6 +95,7 @@ fun Welcome(
         )
       }
     }
+
     Text(
       text = "Welcome on JobFindMe !",
       color = Color.Black.copy(alpha = 0.74f),
@@ -103,7 +103,8 @@ fun Welcome(
       style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
       modifier = Modifier
         .align(alignment = Alignment.TopCenter)
-        .offset(x = 5.dp, y = 160.dp))
+        .offset(x = 5.dp, y = 160.dp)
+    )
 
     val textLines = listOf(
       "Discover thousands of job opportunities and talents.",
@@ -123,10 +124,9 @@ fun Welcome(
           .align(alignment = Alignment.TopCenter)
           .padding(bottom = 16.dp)
           .fillMaxWidth()
-          .offset(y = 436.dp + index * 30.dp)
+          .offset(y =  436.dp + index * 30.dp)
       )
     }
-
 
     Image(
       painter = painterResource(id = R.drawable.app_logo_rounded),
@@ -135,12 +135,9 @@ fun Welcome(
       modifier = Modifier
         .align(alignment = Alignment.TopCenter)
         .offset(x = (-0.25).dp, y = 202.dp)
-        .requiredWidth(width = 203.dp)
-        .requiredHeight(height = 193.dp)
-        .clip(shape = RoundedCornerShape(65536.dp)))
+        .requiredWidth(203.dp)
+        .requiredHeight(193.dp)
+        .clip(shape = RoundedCornerShape(65536.dp))
+    )
   }
-
-
 }
-
-

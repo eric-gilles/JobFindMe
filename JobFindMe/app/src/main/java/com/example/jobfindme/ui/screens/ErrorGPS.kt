@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,9 +29,11 @@ import com.example.jobfindme.ui.components.Shape
 // Function to display the UI for an error with GPS connection
 @Composable
 fun ErrorGPS(modifier: Modifier = Modifier, navController: NavHostController) {
+  val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
   Box(
     modifier = modifier
-      .requiredWidth(width = 375.dp)
+      .requiredWidth(width =screenWidth)
       .requiredHeight(height = 812.dp)
   ) {
     // Main content Box

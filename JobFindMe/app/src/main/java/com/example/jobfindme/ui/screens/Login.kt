@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -60,7 +61,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
     firebaseAuth.signInWithEmailAndPassword(email,password)
       .addOnCompleteListener{task ->
         if (task.isSuccessful){
-          navController.navigate("Accueil")
+          navController.navigate("Home")
         } else {
           //Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
         }
@@ -71,9 +72,11 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
 
       }
   }
+  val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
   Box(
     modifier = modifier
-      .requiredWidth(width = 375.dp)
+      .requiredWidth(width = screenWidth)
       .requiredHeight(height = 812.dp)
   ) {
     Box(

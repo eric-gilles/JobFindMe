@@ -12,6 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -80,6 +82,8 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
   var password by remember { mutableStateOf(TextFieldValue()) }
   var confirm by remember { mutableStateOf(TextFieldValue()) }
   val context: Context = LocalContext.current
+  val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
 
   fun validateFields(): Boolean {
     if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || firstname.text.isBlank() || lastname.text.isBlank()) {
@@ -140,12 +144,13 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
 
     modifier = modifier
       .verticalScroll(rememberScrollState())
+
   ) {
 
     Box(
       modifier = Modifier
-        .requiredWidth(width = 375.dp)
-        .requiredHeight(height = 1100.dp)
+        .requiredWidth(width = screenWidth)
+        .requiredHeight(1100.dp)
         .background(color = Color(0xfff6f6f6))
     ) {
       Shape(

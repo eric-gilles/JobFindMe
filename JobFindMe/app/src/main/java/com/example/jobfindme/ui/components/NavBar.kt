@@ -3,6 +3,7 @@ package com.example.jobfindme.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,15 +26,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.jobfindme.R
 
 // Composable for the bottom navigation bar
 @Composable
-fun BottomNav(modifier: Modifier = Modifier) {
+fun BottomNav(modifier: Modifier = Modifier, navController: NavController) {
   // Main container
+
+
   Box(
     modifier = modifier
       .requiredWidth(width = 393.dp)
@@ -53,9 +58,9 @@ fun BottomNav(modifier: Modifier = Modifier) {
     ) {
       // Navigation items
       Spacer(modifier = Modifier.size(12.dp))
-      BottomNavItem(Icons.Filled.Home, "Home")
+      BottomNavItem(Icons.Filled.Home, navController, "Home")
       Spacer(modifier = Modifier.size(12.dp))
-      BottomNavItem(Icons.Filled.Search, "Search")
+      BottomNavItem(Icons.Filled.Search,navController ,"Search")
       Spacer(modifier = Modifier.size(12.dp))
       Image(
         painter = painterResource(id = R.drawable.app_logo_rounded),
@@ -63,9 +68,9 @@ fun BottomNav(modifier: Modifier = Modifier) {
         modifier = Modifier.size(80.dp)
       )
       Spacer(modifier = Modifier.size(12.dp))
-      BottomNavItem(Icons.Default.AccessTime, "Post")
+      BottomNavItem(Icons.Default.AccessTime, navController,"Post")
       Spacer(modifier = Modifier.size(12.dp))
-      BottomNavItem(Icons.Filled.AccountCircle, "Account")
+      BottomNavItem(Icons.Filled.AccountCircle, navController, "Account")
       Spacer(modifier = Modifier.size(12.dp))
     }
     // Decoration for the bottom navigation bar
@@ -92,10 +97,13 @@ fun BottomNav(modifier: Modifier = Modifier) {
 
 // Composable for the bottom navigation item
 @Composable
-private fun BottomNavItem(icon: ImageVector, contentDescription: String) {
+private fun BottomNavItem(icon: ImageVector,navController: NavController, contentDescription: String) {
   Column(
     verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top),
     horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = Modifier.clickable {
+      navController.navigate(contentDescription)
+    }
   ) {
     Row(
       horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
@@ -110,11 +118,4 @@ private fun BottomNavItem(icon: ImageVector, contentDescription: String) {
       )
     }
   }
-}
-
-// Preview of the bottom navigation bar
-@Preview(widthDp = 393, heightDp = 129)
-@Composable
-private fun BottomNavPreview() {
-  BottomNav(Modifier)
 }

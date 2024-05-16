@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -60,6 +61,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
   var password by remember { mutableStateOf(TextFieldValue()) }
   var confirm by remember { mutableStateOf(TextFieldValue()) }
   val context : Context = LocalContext.current
+  val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
   fun validateFields(): Boolean {
     if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || companyAddress.text.isBlank() || companyName.text.isBlank() || phone.text.isBlank()) {
@@ -113,7 +115,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
   Box(modifier = modifier.verticalScroll(rememberScrollState())){
     Box(
       modifier = modifier
-        .requiredWidth(width = 375.dp)
+        .requiredWidth(width = screenWidth)
         .requiredHeight(height = 1000.dp)
         .background(color = Color(0xfff6f6f6))
 

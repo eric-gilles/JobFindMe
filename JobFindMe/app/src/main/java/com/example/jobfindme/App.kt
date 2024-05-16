@@ -1,12 +1,16 @@
 package com.example.jobfindme
 
+import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.jobfindme.ui.screens.AccueilProfile
+import com.example.jobfindme.ui.components.OfferScreen
+import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
 import com.example.jobfindme.ui.screens.EmployerForm
 import com.example.jobfindme.ui.screens.ErrorGPS
@@ -23,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
   val navController = rememberNavController()
+  val context: Context = LocalContext.current
 
   NavHost(navController, startDestination = "WelcomePage") {
     composable("Signin") {
@@ -42,11 +47,12 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       EmployerForm(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
     composable("WelcomePage"){
+      //OfferScreen()
       Welcome(navController = navController, firebaseAuth = firebaseAuth)
     }
-    composable("Accueil"){
+    composable("Home"){
       if (firebaseAuth.currentUser != null) {
-        AccueilProfile(
+        Home(
           navController = navController,
           firebaseAuth = firebaseAuth,
           firestore = firestore
@@ -62,5 +68,16 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       firebaseAuth.signOut()
       navController.navigate("Choose")
     }
+    composable("Post") {
+      Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+    }
+    composable("Search") {
+      Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+
+    }
+    composable("Account") {
+      Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+    }
+
   }
 }
