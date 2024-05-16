@@ -20,8 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +33,7 @@ import androidx.compose.ui.unit.times
 import androidx.navigation.NavHostController
 
 import com.example.jobfindme.R
-import com.example.jobfindme.ui.components.Shape
+import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -51,15 +50,8 @@ fun Welcome(
       .background(color = Color(0xfff6f6f6))
   ) {
 
-    Box(
-      modifier = Modifier
-        .align(alignment = Alignment.TopStart)
-        .offset(x = -99.dp, y = -109.dp)
-        .requiredWidth(290.dp)
-        .requiredHeight(270.dp)
-    ) {
-      Shape()
-    }
+    CrossedCirclesShapeBlue()
+
 
     Box(
       modifier = Modifier

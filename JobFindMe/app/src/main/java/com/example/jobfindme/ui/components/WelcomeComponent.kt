@@ -1,8 +1,6 @@
 package com.example.jobfindme.ui.components
 
-import android.content.ContentValues
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.material3.Text
 
@@ -106,14 +104,7 @@ fun WelcomeComponent(
             .requiredHeight(height = 307.dp)
             .background(color = Color(0xff50c2c9))
         )
-        Shape(
-          modifier = Modifier
-            .align(alignment = Alignment.TopStart)
-            .offset(
-              x = (-99).dp,
-              y = (-109).dp
-            )
-        )
+        CrossedCirclesShapeWhite()
       }
 
       Box(

@@ -19,12 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.jobfindme.R
-import com.example.jobfindme.ui.components.Shape
+import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 
 // Function to display the UI for an error with GPS connection
 @Composable
@@ -50,11 +49,7 @@ fun ErrorGPS(modifier: Modifier = Modifier, navController: NavHostController) {
           .background(color = Color(0xfff6f6f6))
       ) {
         // Display the shape (Circle)
-        Shape(
-          modifier = Modifier
-            .align(alignment = Alignment.TopStart)
-            .offset(x = (-99).dp, y = (-109).dp)
-        )
+        CrossedCirclesShapeBlue()
       }
       // Image with error GPS icon
       Image(

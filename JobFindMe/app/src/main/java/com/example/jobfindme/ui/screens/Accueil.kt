@@ -1,12 +1,8 @@
 package com.example.jobfindme.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.LogoutButton

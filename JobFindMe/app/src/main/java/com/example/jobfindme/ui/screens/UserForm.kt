@@ -1,18 +1,13 @@
 package com.example.jobfindme.ui.screens
 
-import android.content.ContentValues
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -35,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -52,9 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.jobfindme.ui.components.Shape
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
@@ -144,22 +138,13 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
 
     modifier = modifier
       .verticalScroll(rememberScrollState())
+      .requiredWidth(width = screenWidth)
+      .requiredHeight(1100.dp)
+      .background(color = Color(0xfff6f6f6))
 
   ) {
+    CrossedCirclesShapeBlue()
 
-    Box(
-      modifier = Modifier
-        .requiredWidth(width = screenWidth)
-        .requiredHeight(1100.dp)
-        .background(color = Color(0xfff6f6f6))
-    ) {
-      Shape(
-        modifier = Modifier
-          .align(alignment = Alignment.TopStart)
-          .offset(
-            x = (-99).dp,
-            y = (-109).dp
-          ))
 
       Box(
         modifier = Modifier
@@ -193,7 +178,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           )
         }
       }
-    }
+
     Box(
       modifier = Modifier
         .align(alignment = Alignment.TopStart)

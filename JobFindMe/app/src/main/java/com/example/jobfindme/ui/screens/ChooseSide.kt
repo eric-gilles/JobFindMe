@@ -1,7 +1,6 @@
 package com.example.jobfindme.ui.screens
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,8 +29,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.R
-import com.example.jobfindme.ui.components.Shape
-import com.google.firebase.auth.FirebaseAuth
+import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 
 
 @Composable
@@ -40,32 +37,18 @@ fun ChooseSide(
   modifier: Modifier = Modifier,
   navController: NavController,
 ) {
-  val context : Context = LocalContext.current
   val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
   Box(
     modifier = modifier
       .requiredHeight(height = 812.dp)
       .requiredWidth(width = screenWidth)
+      .background(Color(0xfff6f6f6))
 
   ) {
-    Box(
-      modifier = Modifier
-        .requiredWidth(width = 375.dp)
-        .requiredHeight(height = 812.dp)
-    ) {
-      Box(
-        modifier = Modifier
-          .requiredWidth(width = 375.dp)
-          .requiredHeight(height = 812.dp)
-          .background(color = Color(0xfff6f6f6))
-      ) {
-        Shape(
-          modifier = Modifier
-            .align(alignment = Alignment.TopStart)
-            .offset(x = (-99).dp, y = (-109).dp)
-        )
-      }
+    CrossedCirclesShapeBlue()
+
+
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
@@ -188,4 +171,4 @@ fun ChooseSide(
       }
     }
   }
-}
+

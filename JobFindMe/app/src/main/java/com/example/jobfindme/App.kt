@@ -47,7 +47,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       EmployerForm(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
     composable("WelcomePage"){
-      //OfferScreen()
+//      OfferScreen()
       Welcome(navController = navController, firebaseAuth = firebaseAuth)
     }
     composable("Home"){
