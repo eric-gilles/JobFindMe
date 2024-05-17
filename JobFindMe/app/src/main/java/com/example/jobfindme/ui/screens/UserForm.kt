@@ -135,7 +135,6 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
 
 
   Box(
-
     modifier = modifier
       .verticalScroll(rememberScrollState())
       .requiredWidth(width = screenWidth)
@@ -145,14 +144,10 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
   ) {
     CrossedCirclesShapeBlue()
 
-
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 84.dp,
-            y = 850.dp
-          )
+          .offset(x = 84.dp, y = 850.dp)
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)
       ) {
@@ -160,8 +155,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           onClick = {
             Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
           },
-          colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xff50c2c9)),
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
           modifier = Modifier
             .requiredWidth(width = 207.dp)
             .requiredHeight(height = 40.dp)){
@@ -182,10 +176,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
     Box(
       modifier = Modifier
         .align(alignment = Alignment.TopStart)
-        .offset(
-          x = 64.dp,
-          y = 83.dp
-        )
+        .offset(x = 64.dp, y = 83.dp)
         .requiredWidth(width = 246.dp)
         .requiredHeight(height = 69.dp)
     ) {
@@ -194,7 +185,6 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
         modifier = Modifier
           .align(Alignment.TopCenter)
           .offset(y = 30.dp)
-
       ) {
         Column(
           horizontalAlignment = Alignment.CenterHorizontally,
@@ -224,10 +214,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           fontWeight = FontWeight.Bold),
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
-          .offset(
-            x = 0.dp,
-            y = (-5).dp
-          )
+          .offset(x = 0.dp, y = (-5).dp)
           .requiredWidth(width = 246.dp)
           .requiredHeight(height = 28.dp))
     }
@@ -278,7 +265,6 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           singleLine = true,
           value = lastname,
           onValueChange = { lastname = it },
-
           label = {
             Text(
               text = "Last Name *",
@@ -295,7 +281,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
             open.value = true
           },
           enabled = false,
-          value = birthdate.value.format(DateTimeFormatter.ISO_DATE) ,
+          value = birthdate.value.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ,
           onValueChange = {},
           colors = TextFieldDefaults.outlinedTextFieldColors(
             disabledTextColor = MaterialTheme.colorScheme.onSurface,
@@ -407,10 +393,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
     Box(
       modifier = Modifier
         .align(alignment = Alignment.TopStart)
-        .offset(
-          x = 24.dp,
-          y = 910.dp
-        )
+        .offset(x = 24.dp, y = 910.dp)
         .requiredWidth(width = 326.dp)
         .requiredHeight(height = 64.dp)
     ) {
@@ -454,17 +437,12 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           fontWeight = FontWeight.Medium)) {append("Sign In")}},
       modifier = Modifier
         .align(alignment = Alignment.TopCenter)
-        .offset(
-          x = (-0.5).dp,
-          y = 990.dp
-        ).clickable { navController.navigate("Signin") })
+        .offset(x = (-0.5).dp, y = 990.dp)
+        .clickable { navController.navigate("Signin") })
     Box(
       modifier = Modifier
         .align(alignment = Alignment.TopStart)
-        .offset(
-          x = 84.dp,
-          y = 1030.dp
-        )
+        .offset(x = 84.dp, y = 1030.dp)
         .requiredWidth(width = 207.dp)
         .requiredHeight(height = 34.dp)
     ) {
@@ -485,8 +463,8 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
           ),
-
-          )
+          modifier = Modifier.align(alignment = Alignment.CenterVertically)
+        )
       }
     }
   }

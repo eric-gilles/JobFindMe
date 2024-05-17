@@ -63,7 +63,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
         }
       }
       .addOnFailureListener { exception ->
-//        Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
+        //Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
         Toast.makeText(context,exception.toString(),Toast.LENGTH_LONG).show()
 
       }
@@ -87,13 +87,13 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           .background(color = Color(0xfff6f6f6))
       ) {
         CrossedCirclesShapeBlue()
+
         Image(
           painter = painterResource(id = R.drawable.app_logo_rounded),
           contentDescription = "Color logo with background 6",
           modifier = Modifier
             .align(alignment = Alignment.TopCenter)
-            .offset(x = (-0.25).dp,
-              y = 150.dp)
+            .offset(x = (-0.25).dp, y = 150.dp)
             .requiredWidth(width = 203.dp)
             .requiredHeight(height = 193.dp)
             .clip(shape = RoundedCornerShape(65536.dp)))
@@ -110,17 +110,15 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           fontWeight = FontWeight.Bold),
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
-          .offset(
-            x = 0.dp,
-            y = 100.dp
-          ))
+          .offset(x = 0.dp, y = 100.dp)
+      )
+
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
           .offset(x = 0.dp, y = 350.dp)
           .requiredWidth(width = 375.dp)
           .requiredHeight(height = 250.dp)
-
       ) {
         Column(
           modifier = Modifier.fillMaxWidth(),
@@ -160,7 +158,6 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
         }
       }
 
-
       Text(
         text = "Forgot Password ?",
         color = Color(0xff00adb5),
@@ -170,12 +167,10 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           fontWeight = FontWeight.Medium),
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
-          .offset(
-            x = 0.dp,
-            y = 530.dp
-          ).clickable {
+          .offset(x = 0.dp, y = 530.dp)
+          .clickable {
             if (email.text.isBlank()){
-              Toast.makeText(context,"Please fill atleast your email", Toast.LENGTH_LONG).show()
+              Toast.makeText(context,"Please fill at least your email", Toast.LENGTH_LONG).show()
               return@clickable
             }
             firebaseAuth.sendPasswordResetEmail(email.text).addOnCompleteListener { task ->
@@ -183,7 +178,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
                 Toast.makeText(context,"Email send to "+email.text, Toast.LENGTH_LONG).show()
                 return@addOnCompleteListener
               }
-            }.addOnFailureListener{ exception ->
+            }.addOnFailureListener{ _ ->
               Toast.makeText(context,"Email incorrect", Toast.LENGTH_LONG).show()
               return@addOnFailureListener
             }
@@ -192,44 +187,42 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
       Text(
         lineHeight = 9.sp,
         text = buildAnnotatedString {
-          withStyle(style = SpanStyle(
-            color = Color(0xff1e1e1e),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium)) {append("Don’t have an account ? ")}
-          withStyle(style = SpanStyle(
-            color = Color(0xff50c2c9),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium)
-          ) {append("Register ")}},
+          withStyle(
+            style = SpanStyle(
+              color = Color(0xff1e1e1e),
+              fontSize = 16.sp,
+              fontWeight = FontWeight.Medium
+            )
+          ) { append("Don’t have an account ? ") }
+          withStyle(
+            style = SpanStyle(
+              color = Color(0xff50c2c9),
+              fontSize = 16.sp,
+              fontWeight = FontWeight.Medium
+            )
+          ) { append("Register ") }
+        },
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
-          .offset(
-            x = 0.dp,
-            y = 650.dp
-          )
-          .clickable { navController.navigate("Choose") })
+          .offset(x = 0.dp, y = 650.dp)
+          .clickable { navController.navigate("Choose") }
+      )
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 24.dp,
-            y = 570.dp
-          )
+          .offset(x = 24.dp, y = 570.dp)
           .requiredWidth(width = 326.dp)
           .requiredHeight(height = 64.dp)
       ) {
         Button(
           onClick = {
-//            Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+            // Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
             SignIn(email.text,password.text)
           },
-          colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xff50c2c9)),
-
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
           modifier = Modifier
             .requiredWidth(width = 326.dp)
             .requiredHeight(height = 64.dp)
-
         ) {
           Text(
             text = "Sign In",
@@ -242,15 +235,11 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
             modifier = Modifier.align(alignment = Alignment.CenterVertically)
           )
         }
-
       }
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 84.dp,
-            y = 700.dp
-          )
+          .offset(x = 84.dp, y = 700.dp)
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)
       ) {
@@ -258,13 +247,10 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
           onClick = {
             navController.navigate("Signin/anonymous")
           },
-          colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xff50c2c9)),
-
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
           modifier = Modifier
             .requiredWidth(width = 207.dp)
             .requiredHeight(height = 40.dp)
-
         ) {
           Text(
             text = "Anonymous ?",

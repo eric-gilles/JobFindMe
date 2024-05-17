@@ -58,20 +58,13 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
   val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
   fun validateFields(): Boolean {
-    if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || companyAddress.text.isBlank() || companyName.text.isBlank() || phone.text.isBlank()) {
-      Toast.makeText(
-        context,
-        "All fields must be filled.",
-        Toast.LENGTH_SHORT
-      ).show()
+    if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank()
+      || companyAddress.text.isBlank() || companyName.text.isBlank() || phone.text.isBlank()) {
+      Toast.makeText(context, "All fields must be filled.", Toast.LENGTH_SHORT).show()
       return false
     }
     if (password.text != confirm.text) {
-      Toast.makeText(
-        context,
-        "Both passwords must be identical.",
-        Toast.LENGTH_SHORT
-      ).show()
+      Toast.makeText(context, "Both passwords must be identical.", Toast.LENGTH_SHORT).show()
       return false
     }
     return true
@@ -79,10 +72,8 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
 
   fun createUserAndAuthenticate() {
     if (validateFields()) {
-      firebaseAuth.createUserWithEmailAndPassword(email.text, password.text)
-        .addOnCompleteListener { task ->
+      firebaseAuth.createUserWithEmailAndPassword(email.text, password.text).addOnCompleteListener { task ->
           if (task.isSuccessful) {
-
             val user = firebaseAuth.currentUser
             val employerDocument = firestore.collection("Employers").document(user?.uid ?: "")
             val employerData = hashMapOf(
@@ -91,15 +82,12 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
               "address" to companyAddress.text,
               "phone" to phone.text,
             )
-            employerDocument.set(employerData)
-              .addOnSuccessListener {
+            employerDocument.set(employerData).addOnSuccessListener {
                 Toast.makeText(context, "User registered successfully", Toast.LENGTH_SHORT).show()
-
                 navController.navigate("WelcomePage")
-              }
-              .addOnFailureListener { e ->
+            }.addOnFailureListener { e ->
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-              }
+            }
           } else {
             Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
           }
@@ -112,29 +100,23 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
         .requiredWidth(width = screenWidth)
         .requiredHeight(height = 1000.dp)
         .background(color = Color(0xfff6f6f6))
-
     ) {
       CrossedCirclesShapeBlue()
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 62.dp,
-            y = 100.dp
-          )
+          .offset(x = 62.dp, y = 100.dp)
           .requiredWidth(width = 250.dp)
           .requiredHeight(height = 150.dp)
       ) {
         Box (
           modifier = Modifier
             .align(Alignment.TopCenter)
-            .offset(y = 40.dp) // Déplacer le Column vers le bas
-
+            .offset(y = 40.dp)
         ) {
           Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.requiredWidth(width = 375.dp)
-
           ) {
             Text(
               text = "Discover temporary talent for your company.",
@@ -142,8 +124,6 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
               fontSize = 12.sp,
               fontStyle = FontStyle.Italic,
               modifier = Modifier.padding(bottom = 8.dp)
-
-
             )
             Text(
               text = "Please Register",
@@ -158,25 +138,17 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           color = Color.Black.copy(alpha = 0.75f),
           textAlign = TextAlign.Center,
           lineHeight = 6.25.em,
-          style = TextStyle(
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold),
+          style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
           modifier = Modifier
             .align(alignment = Alignment.TopCenter)
-            .offset(
-              x = 0.dp,
-              y = 0.dp
-            )
+            .offset(x = 0.dp, y = 0.dp)
             .requiredWidth(width = 250.dp)
             .requiredHeight(height = 30.dp))
       }
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 38.dp,
-            y = 220.dp
-          )
+          .offset(x = 38.dp, y = 220.dp)
           .requiredWidth(width = 298.dp)
           .requiredHeight(height = 700.dp)
       ) {
@@ -278,17 +250,13 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             ),
             modifier = Modifier.padding(vertical = 4.dp),
             singleLine = true,
-
           )
         }
       }
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 24.dp,
-            y = 730.dp
-          )
+          .offset(x = 24.dp, y = 730.dp)
           .requiredWidth(width = 326.dp)
           .requiredHeight(height = 64.dp)
       ) {
@@ -296,22 +264,15 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           onClick = {
             createUserAndAuthenticate()
           },
-          colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xff50c2c9)),
-
-          modifier = Modifier
-            .requiredWidth(width = 326.dp)
-            .requiredHeight(height = 64.dp)
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+          modifier = Modifier.requiredWidth(width = 326.dp).requiredHeight(height = 64.dp)
 
         ) {
           Text(
             text = "Register",
             color = Color.White,
             lineHeight = 6.25.em,
-            style = TextStyle(
-              fontSize = 24.sp,
-              fontWeight = FontWeight.Bold
-            ),
+            style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             modifier = Modifier.align(alignment = Alignment.CenterVertically)
           )
         }
@@ -328,23 +289,17 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             color = Color(0xff50c2c9),
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium)
-          ) {append("Sign In")}},
+          ) { append("Sign In") }
+        },
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
-          .offset(
-            x = (-0.5).dp,
-            y = 820.dp
-          )
+          .offset(x = (-0.5).dp, y = 820.dp)
           .clickable { navController.navigate("Signin") }
-
       )
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 84.dp,
-            y = 870.dp
-          )
+          .offset(x = 84.dp, y = 870.dp)
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)
       ) {

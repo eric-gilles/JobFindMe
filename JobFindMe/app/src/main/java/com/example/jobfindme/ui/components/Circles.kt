@@ -20,8 +20,8 @@ fun CrossedCirclesShapeBlue(modifier: Modifier = Modifier) {
   Box(modifier = modifier.fillMaxSize()) {
     Canvas(modifier = Modifier.fillMaxSize()) {
       val circleRadius = 102.085.dp.toPx()
-      val offset1 = Offset(265f, 0f) // Ajustez la position du premier cercle
-      val offset2 = Offset(0f, 175f) // Ajustez la position du deuxième cercle
+      val offset1 = Offset(265f, 0f)
+      val offset2 = Offset(0f, 175f)
 
       drawCircle(Color(0x696ae0d9), radius = circleRadius, center = offset1)
       drawCircle(Color(0x696ae0d9), radius = circleRadius, center = offset2)
@@ -32,12 +32,11 @@ fun CrossedCirclesShapeBlue(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun CrossedCirclesShapeWhite(modifier: Modifier = Modifier) {
-  Box(modifier = modifier.fillMaxSize() // Ajout du fond de couleur
-  ) {
+  Box(modifier = modifier.fillMaxSize()) {
     Canvas(modifier = Modifier.fillMaxSize()) {
       val circleRadius = 102.085.dp.toPx()
-      val offset1 = Offset(265f, 0f) // Ajustez la position du premier cercle
-      val offset2 = Offset(0f, 175f) // Ajustez la position du deuxième cercle
+      val offset1 = Offset(265f, 0f)
+      val offset2 = Offset(0f, 175f)
 
       drawCircle(Color(0x49f6f6f6), radius = circleRadius, center = offset1)
       drawCircle(Color(0x49f6f6f6), radius = circleRadius, center = offset2)
