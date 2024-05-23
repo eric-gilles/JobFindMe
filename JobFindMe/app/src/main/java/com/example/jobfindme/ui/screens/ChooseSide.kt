@@ -44,34 +44,32 @@ fun ChooseSide(
       .requiredHeight(height = 812.dp)
       .requiredWidth(width = screenWidth)
       .background(Color(0xfff6f6f6))
-
   ) {
     CrossedCirclesShapeBlue()
 
-
-      Box(
-        modifier = Modifier
-          .align(alignment = Alignment.TopCenter)
-          .offset(x = (-0.12105560302734375).dp, y = 206.dp)
-          .requiredWidth(width = 181.dp)
-          .requiredHeight(height = 172.dp)
-          .clip(shape = RoundedCornerShape(65536.dp))
-          .background(color = Color.White)
-          .border(
-            border = BorderStroke(3.dp, Color.White),
-            shape = RoundedCornerShape(65536.dp)
-          )
-      ) {
+    Box(
+      modifier = Modifier
+        .align(alignment = Alignment.TopCenter)
+        .offset(x = (-0.12105560302734375).dp, y = 206.dp)
+        .requiredWidth(width = 181.dp)
+        .requiredHeight(height = 172.dp)
+        .clip(shape = RoundedCornerShape(65536.dp))
+        .background(color = Color.White)
+        .border(
+          border = BorderStroke(3.dp, Color.White),
+          shape = RoundedCornerShape(65536.dp)
+        )
+    ) {
         Image(
           painter = painterResource(id = R.drawable.app_logo_rounded),
-          contentDescription = "Application Logo",
-          contentScale = ContentScale.Crop,
-          modifier = Modifier
-            .align(alignment = Alignment.TopCenter)
-            .requiredWidth(width = 181.dp)
-            .requiredHeight(height = 172.dp)
-            .clip(shape = RoundedCornerShape(65536.dp))
-        )
+            contentDescription = "Application Logo",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+              .align(alignment = Alignment.TopCenter)
+              .requiredWidth(width = 181.dp)
+              .requiredHeight(height = 172.dp)
+              .clip(shape = RoundedCornerShape(65536.dp))
+          )
       }
       Text(
         text = "Welcome !",
@@ -117,18 +115,15 @@ fun ChooseSide(
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(x = 39.dp,
-            y = 544.dp)
+          .offset(x = 39.dp, y = 544.dp)
           .requiredWidth(width = 296.dp)
           .requiredHeight(height = 50.dp)
       ) {
         Button(
           onClick = {
             navController.navigate("Signup/employer")
-
           },
-          colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xff50c2c9)),
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
           modifier = modifier
             .requiredWidth(width = 296.dp)
             .requiredHeight(height = 50.dp)
@@ -149,8 +144,7 @@ fun ChooseSide(
         onClick = {
           navController.navigate("Signin/anonymous")
         },
-        colors = ButtonDefaults.buttonColors(
-          containerColor = Color(0xff50c2c9)),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
 
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)

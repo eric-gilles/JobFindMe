@@ -27,16 +27,13 @@ fun LogoutButton(
   navController: NavController,
 ) {
   Row(
-    modifier = modifier.fillMaxWidth()
-      .padding(top = 35.dp, start = 300.dp)
+    modifier = modifier.fillMaxWidth().padding(top = 35.dp, start = 300.dp)
   ) {
     Button(
       onClick = {
         navController.navigate("Signout")
       },
-      modifier = Modifier
-        .requiredSize(50.dp),
-
+      modifier = Modifier.requiredSize(50.dp),
       colors = ButtonDefaults.buttonColors(Color.White),
       shape = RoundedCornerShape(8.dp),
       contentPadding = PaddingValues(0.dp)

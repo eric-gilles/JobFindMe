@@ -1,7 +1,6 @@
 package com.example.jobfindme.ui.components
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,9 +23,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
@@ -68,36 +67,32 @@ fun OffreCard(offre: Offre) {
       Spacer(modifier = Modifier.height(8.dp))
       Text(
         text = "Company: ${offre.entreprise}",
-        color = Color(0xff000000), // Couleur du texte pour le contenu principal
+        color = Color(0xff000000),
         fontSize = 16.sp,
         textAlign = TextAlign.Justify
-
       )
       Spacer(modifier = Modifier.height(4.dp))
       Text(
         text = "Address: ${offre.lieu}",
-        color = Color(0xff000000), // Couleur du texte pour le contenu secondaire
+        color = Color(0xff000000),
         fontSize = 14.sp,
         textAlign = TextAlign.Justify
-
       )
       Spacer(modifier = Modifier.height(4.dp))
       Text(
         text = if (showFullDescription) offre.description else limitDescription(offre.description),
-        color = Color(0xff000000), // Couleur du texte pour le contenu secondaire
+        color = Color(0xff000000),
         fontSize = 14.sp,
         overflow = TextOverflow.Ellipsis ,
         textAlign = TextAlign.Justify
-
-
       )
       if (offre.description.length > limit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
           if (!showFullDescription) {
             Text(
               text = "Show more",
-              color = Color(0xff50c2c9), // Couleur du texte "Show more"
-              fontSize = 12.sp, // Taille de police réduite
+              color = Color(0xff50c2c9),
+              fontSize = 12.sp,
               modifier = Modifier.clickable {
                 showFullDescription = true
               }
@@ -105,8 +100,8 @@ fun OffreCard(offre: Offre) {
           } else {
             Text(
               text = "Show less",
-              color = Color(0xff50c2c9), // Couleur du texte "Show less"
-              fontSize = 12.sp, // Taille de police réduite
+              color = Color(0xff50c2c9),
+              fontSize = 12.sp,
               modifier = Modifier.clickable {
                 showFullDescription = false
               }

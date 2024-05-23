@@ -25,9 +25,7 @@ fun CustomDatePicker() {
       yearSelection = true,
       style = CalendarStyle.MONTH,
     ),
-    selection = CalendarSelection.Date(
-      selectedDate = selectedDate.value
-    ) { newDate ->
+    selection = CalendarSelection.Date(selectedDate = selectedDate.value) { newDate ->
       selectedDate.value = newDate
     },
   )

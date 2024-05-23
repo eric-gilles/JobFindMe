@@ -3,7 +3,6 @@ package com.example.jobfindme.ui.components
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.material3.Text
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,16 +14,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +28,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -110,10 +104,7 @@ fun WelcomeComponent(
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 132.dp,
-            y = 119.dp
-          )
+          .offset(x = 132.dp, y = 119.dp)
           .requiredWidth(width = 122.dp)
           .requiredHeight(height = 116.dp)
           .clip(shape = RoundedCornerShape(65536.dp))
@@ -142,10 +133,7 @@ fun WelcomeComponent(
         style = TextStyle(fontSize = 18.sp),
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(
-            x = 79.dp,
-            y = 251.dp
-          )
+          .offset(x = 79.dp, y = 251.dp)
       )
     }
   }
