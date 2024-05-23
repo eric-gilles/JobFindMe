@@ -15,6 +15,7 @@ import com.example.jobfindme.ui.screens.ChooseSide
 import com.example.jobfindme.ui.screens.EmployerForm
 import com.example.jobfindme.ui.screens.ErrorGPS
 import com.example.jobfindme.ui.screens.Login
+import com.example.jobfindme.ui.screens.SearchOffers
 import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +49,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
     }
     composable("WelcomePage"){
 //      OfferScreen()
+      //SearchOffers(navController = navController, firebaseAuth = firebaseAuth);
       Welcome(navController = navController, firebaseAuth = firebaseAuth)
     }
     composable("Home"){
@@ -81,3 +83,4 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
 
   }
 }
+
