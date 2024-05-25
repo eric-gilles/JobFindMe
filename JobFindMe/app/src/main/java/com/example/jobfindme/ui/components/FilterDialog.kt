@@ -1,34 +1,39 @@
 package com.example.jobfindme.ui.components
 
+import android.content.Context
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -36,360 +41,243 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.example.jobfindme.R
+import com.example.jobfindme.data.OfferOutput
+import com.example.jobfindme.data.toOfferOutput
+import com.google.firebase.firestore.FirebaseFirestore
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-@Preview
-fun FilterDialog(modifier: Modifier = Modifier, onDismissRequest: () -> Unit) {
-  // States for dropdown menu visibility
+fun FilterDialog(
+  modifier: Modifier = Modifier,
+  onDismissRequest: () -> Unit,
+  job: MutableState<String>,
+  city: MutableState<String>,
+  employer: MutableState<String>,
+  startingDate: MutableState<LocalDate>,
+  endingDate: MutableState<LocalDate>,
+  offersList: MutableList<OfferOutput>,
+  firestore: FirebaseFirestore
+) {
   val (jobMenuExpanded, setJobMenuExpanded) = remember { mutableStateOf(false) }
   val (cityMenuExpanded, setCityMenuExpanded) = remember { mutableStateOf(false) }
   val (employerMenuExpanded, setEmployerMenuExpanded) = remember { mutableStateOf(false) }
-
-  // Dummy data for dropdown options
-  val jobOptions = listOf("Developer", "Designer", "Manager")
-  val cityOptions = listOf("New York", "San Francisco", "Los Angeles")
-  val employerOptions = listOf("Company A", "Company B", "Company C")
-
-  // State to hold selected options
-  val (selectedJob, setSelectedJob) = remember { mutableStateOf(jobOptions[0]) }
-  val (selectedCity, setSelectedCity) = remember { mutableStateOf(cityOptions[0]) }
-  val (selectedEmployer, setSelectedEmployer) = remember { mutableStateOf(employerOptions[0]) }
-  val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-  val openStart = remember { mutableStateOf(false)}
-  val openEnd = remember { mutableStateOf(false)}
-  val startingDate = remember { mutableStateOf(LocalDate.now())}
-  val endingDate = remember { mutableStateOf(LocalDate.now())}
+  val jobOptions = remember { mutableListOf<String>("Select Job") }
+  val cityOptions = remember { mutableListOf<String>("Select City")}
+  val employerOptions = remember { mutableListOf<String>("Select Employer")  }
 
 
+  val (selectedJob, setSelectedJob) = job
+  val (selectedCity, setSelectedCity) = city
+  val (selectedEmployer, setSelectedEmployer) = employer
+  val context:Context = LocalContext.current
+
+
+
+  val openStart = remember { mutableStateOf(false) }
+  val openEnd = remember { mutableStateOf(false) }
+  fun loadOptions(){
+    val offersCollection = firestore.collection("Offers")
+    offersCollection.get().addOnSuccessListener { documents ->
+      documents.forEach { document ->
+        CoroutineScope(Dispatchers.IO).launch {
+          val offer = document.toOfferOutput()
+          withContext(Dispatchers.Main) {
+            if (!employerOptions.contains(offer.employerDetails.name))
+              employerOptions.add(offer.employerDetails.name)
+            if (!jobOptions.contains(offer.jobName))
+              jobOptions.add(offer.jobName)
+            if (!cityOptions.contains(offer.city))
+              cityOptions.add(offer.city)
+          }
+        }
+      }
+    }.addOnFailureListener { exception ->
+      Toast.makeText(context, exception.message.toString(), Toast.LENGTH_LONG).show()
+    }
+  }
+  fun clearAndSave(offers: ArrayList<OfferOutput>) {
+    if (startingDate.value> endingDate.value) {
+      Toast.makeText(context, "Starting date should be before the ending date", Toast.LENGTH_LONG).show()
+      return
+    }
+    val filtered_offers : ArrayList<OfferOutput> = offers
+    val jobSelected = job.value != "Select Job"
+    val citySelected = city.value != "Select City"
+    val employerSelected = employer.value != "Select Employer"
+    val startDate = Date.from(startingDate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    val endDate = Date.from(endingDate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    Log.d("Filtered","Size filtered:"+filtered_offers.size)
+
+
+    val iterator = filtered_offers.iterator()
+    while (iterator.hasNext()) {
+      val offer = iterator.next()
+
+      val startDiffInMillies = abs(offer.startingDate.time - startDate.time)
+      val startDiffInDays = TimeUnit.DAYS.convert(startDiffInMillies, TimeUnit.MILLISECONDS)
+
+      val endDiffInMillies = abs(offer.endingDate.time - endDate.time)
+      val endDiffInDays = TimeUnit.DAYS.convert(endDiffInMillies, TimeUnit.MILLISECONDS)
+
+      if ((startDiffInDays > 3) || (endDiffInDays > 3)) {
+        iterator.remove()
+      }
+    }
+
+    if (jobSelected){
+      for (offer in filtered_offers){
+        if (offer.jobName != job.value){
+          filtered_offers.remove(offer)
+        }
+      }
+    }
+    if (citySelected){
+      for (offer in filtered_offers){
+        if (offer.city != city.value){
+          filtered_offers.remove(offer)
+        }
+      }
+    }
+    if (employerSelected){
+      for (offer in filtered_offers){
+        if (offer.employerDetails.name != employer.value){
+          filtered_offers.remove(offer)
+        }
+      }
+    }
+
+    offersList.clear()
+    for (offer in filtered_offers){
+      offersList.add(offer)
+    }
+    onDismissRequest()
+  }
+  @RequiresApi(Build.VERSION_CODES.O)
+  fun fetchOfferOnLoad(
+  ) {
+    CoroutineScope(Dispatchers.Main).launch {
+      try {
+        val offersCollection = firestore.collection("Offers")
+        val documents = offersCollection.get().await()
+        val offers = coroutineScope {
+          documents.map { document ->
+            async(Dispatchers.IO) {
+              document.toOfferOutput()
+            }
+          }.awaitAll()
+        }
+        clearAndSave(ArrayList(offers))
+      } catch (e: Exception) {
+        Toast.makeText(context, e.message.toString(), Toast.LENGTH_LONG).show()
+      }
+    }
+  }
+
+
+
+
+  LaunchedEffect(Unit) {
+    loadOptions()
+  }
   Dialog(onDismissRequest = onDismissRequest) {
-    Box(modifier= modifier
-      .requiredWidth(screenWidth - 50.dp)
-      .requiredHeight(600.dp)
-      .background(Color(0xfff6f6f6))) {
-
-      // Job Selection with DropdownMenu
-      Box(
-        modifier = Modifier
-          .align(Alignment.TopStart)
-          .offset(x = 20.dp, y = 20.dp)
-          .requiredWidth(296.dp)
-          .requiredHeight(76.dp)
-      ) {
-        Text(
-          text = "Job :",
-          color = Color(0xff2f313c),
-          style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium),
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 6.dp, y = 0.dp)
+    Box(
+      modifier = modifier
+        .padding(24.dp)
+        .background(Color(0xfff6f6f6), RoundedCornerShape(8.dp))
+        .padding(16.dp)
+    ) {
+      Column {
+        DropdownMenuField(
+          label = "Job",
+          options = jobOptions,
+          selectedOption = selectedJob,
+          onOptionSelected = setSelectedJob,
+          menuExpanded = jobMenuExpanded,
+          onMenuExpandedChange = setJobMenuExpanded
         )
-        Box(
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 0.dp, y = 26.dp)
-            .requiredWidth(296.dp)
-            .requiredHeight(50.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xff50c2c9).copy(alpha = 0.5f))
-            .clickable { setJobMenuExpanded(true) }
+        Spacer(modifier = Modifier.height(16.dp))
+        DropdownMenuField(
+          label = "City",
+          options = cityOptions,
+          selectedOption = selectedCity,
+          onOptionSelected = setSelectedCity,
+          menuExpanded = cityMenuExpanded,
+          onMenuExpandedChange = setCityMenuExpanded,
+          icon = Icons.Default.LocationOn,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        DropdownMenuField(
+          label = "Employer",
+          options = employerOptions,
+          selectedOption = selectedEmployer,
+          onOptionSelected = setSelectedEmployer,
+          menuExpanded = employerMenuExpanded,
+          onMenuExpandedChange = setEmployerMenuExpanded
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        DatePickerField(
+          label = "Starting Date",
+          date = startingDate.value,
+          onDateSelected = { startingDate.value = it },
+          openDatePicker = openStart
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        DatePickerField(
+          label = "Ending Date",
+          date = endingDate.value,
+          onDateSelected = { endingDate.value = it },
+          openDatePicker = openEnd
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+          horizontalArrangement = Arrangement.End,
+          modifier = Modifier.fillMaxWidth()
+
         ) {
-          Text(
-            text = selectedJob,
-            color = Color(0xff2f313c),
-            modifier = Modifier
-              .align(Alignment.CenterStart)
-              .padding(start = 16.dp)
-          )
-          Image(
-            painter = painterResource(id = R.drawable.keyboard_arrow_down),
-            contentDescription = "keyboard_arrow_down",
-            colorFilter = ColorFilter.tint(Color.Black),
-            modifier = Modifier
-              .align(Alignment.CenterEnd)
-              .padding(end = 16.dp)
-              .requiredSize(24.dp)
-          )
-          DropdownMenu(
-            expanded = jobMenuExpanded,
-            onDismissRequest = { setJobMenuExpanded(false) }
-          ) {
-            jobOptions.forEach { job ->
-              DropdownMenuItem(
-                text = {
-                  Text(text = job)
-                },
-                onClick = {
-                  setSelectedJob(job)
-                  setJobMenuExpanded(false)
-                })
-            }
+          Button(
+            onClick = { onDismissRequest() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xfff6f6f6)),
+            ) {
+            Text(
+              text = "Cancel",
+              color = Color(0xff50c2c9)
+            )
           }
-        }
-      }
-
-
-      // City Selection with DropdownMenu
-      Box(
-        modifier = Modifier
-          .align(Alignment.TopStart)
-          .offset(x = 20.dp, y = 110.dp)
-          .requiredWidth(296.dp)
-          .requiredHeight(76.dp)
-      ) {
-        Text(
-          text = "City :",
-          color = Color(0xff2f313c),
-          style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        )
-        Box(
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 0.dp, y = 26.dp)
-            .requiredWidth(296.dp)
-            .requiredHeight(50.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xffa7e0e3))
-            .clickable { setCityMenuExpanded(true) }
-        ) {
-          Text(
-            text = selectedCity,
-            color = Color(0xff2f313c),
-            modifier = Modifier
-              .align(Alignment.CenterStart)
-              .padding(start = 16.dp)
-          )
-          Image(
-            painter = painterResource(id = R.drawable.fmd_good),
-            contentDescription = "fmd_good",
-            colorFilter = ColorFilter.tint(Color.Black),
-            modifier = Modifier
-              .align(Alignment.CenterEnd)
-              .padding(end = 16.dp)
-              .requiredSize(24.dp)
-          )
-          DropdownMenu(
-            expanded = cityMenuExpanded,
-            onDismissRequest = { setCityMenuExpanded(false) }
+          Spacer(modifier = Modifier.width(8.dp))
+          Button(
+            onClick = { fetchOfferOnLoad() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
           ) {
-            cityOptions.forEach { city ->
-              DropdownMenuItem(
-                text = { Text(text = city) },
-                onClick = {
-                  setSelectedCity(city)
-                  setCityMenuExpanded(false)
-                })
-            }
-          }
-        }
-      }
+            Text(
+              text = "Save",
+              color = Color(0xfff6f6f6)
 
-      // Starting Date (as text input for simplicity)
-      Box(
-        modifier = Modifier
-          .align(Alignment.TopStart)
-          .offset(x = 20.dp, y = 200.dp)
-          .requiredWidth(296.dp)
-          .requiredHeight(76.dp)
-      ) {
-        Text(
-          text = "Starting Date :",
-          color = Color(0xff2f313c),
-          style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium),
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 2.dp, y = 0.dp)
-        )
-        TextField(
-          modifier = Modifier.clickable {
-            openStart.value = true
-          },
-          enabled = false,
-          value = startingDate.value.format(DateTimeFormatter.ISO_DATE),
-          onValueChange = {},
-          colors = TextFieldDefaults.outlinedTextFieldColors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.outline,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-          )
-        )
-        if (openStart.value) {
-          CalendarDialog(
-            state = rememberUseCaseState(
-              visible = true,
-              true,
-              onCloseRequest = { openStart.value = false }),
-            config = CalendarConfig(
-              yearSelection = true,
-              style = CalendarStyle.MONTH,
-            ),
-            selection = CalendarSelection.Date(
-              selectedDate = startingDate.value
-            ) { newDate ->
-              startingDate.value = newDate
-            },
-          )
-        }
-      }
-      // Ending Date (as text input for simplicity)
-      Box(
-        modifier = Modifier
-          .align(Alignment.TopStart)
-          .offset(x = 20.dp, y = 270.dp)
-          .requiredWidth(296.dp)
-          .requiredHeight(76.dp)
-      ) {
-        Text(
-          text = "Ending Date :",
-          color = Color(0xff2f313c),
-          style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium),
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 2.dp, y = 0.dp)
-        )
-        TextField(
-          modifier = Modifier.clickable {
-            openEnd.value = true
-          },
-          enabled = false,
-          value = endingDate.value.format(DateTimeFormatter.ISO_DATE),
-          onValueChange = {},
-          colors = TextFieldDefaults.outlinedTextFieldColors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.outline,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-          )
-        )
-        if (openEnd.value) {
-          CalendarDialog(
-            state = rememberUseCaseState(
-              visible = true,
-              true,
-              onCloseRequest = { openEnd.value = false }),
-            config = CalendarConfig(
-              yearSelection = true,
-              style = CalendarStyle.MONTH,
-            ),
-            selection = CalendarSelection.Date(
-              selectedDate = endingDate.value
-            ) { newDate ->
-              endingDate.value = newDate
-            },
-          )
-        }
-      }
-      // Employer Selection with DropdownMenu
-      Box(
-        modifier = Modifier
-          .align(Alignment.TopStart)
-          .offset(x = 20.dp, y = 340.dp)
-          .requiredWidth(296.dp)
-          .requiredHeight(79.dp)
-      ) {
-        Text(
-          text = "Employer :",
-          color = Color(0xff2f313c),
-          style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium),
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 2.dp, y = 0.dp)
-        )
-        Box(
-          modifier = Modifier
-            .align(Alignment.TopStart)
-            .offset(x = 0.dp, y = 26.dp)
-            .requiredWidth(296.dp)
-            .requiredHeight(50.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xffa7e0e3))
-            .clickable { setEmployerMenuExpanded(true) }
-        ) {
-          Text(
-            text = selectedEmployer,
-            color = Color(0xff2f313c),
-            modifier = Modifier
-              .align(Alignment.CenterStart)
-              .padding(start = 16.dp)
-          )
-          Image(
-            painter = painterResource(id = R.drawable.keyboard_arrow_down),
-            contentDescription = "keyboard_arrow_down",
-            colorFilter = ColorFilter.tint(Color.Black),
-            modifier = Modifier
-              .align(Alignment.CenterEnd)
-              .padding(end = 16.dp)
-              .requiredSize(24.dp)
-          )
-          DropdownMenu(
-            expanded = employerMenuExpanded,
-            onDismissRequest = { setEmployerMenuExpanded(false) }
-          ) {
-            employerOptions.forEach { employer ->
-              DropdownMenuItem(
-                text = { Text(text = employer) },
-                onClick = {
-                  setSelectedEmployer(employer)
-                  setEmployerMenuExpanded(false)
-                })
-            }
-          }
-        }
-      }
-      Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-      ) {
-        Column(
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          Row(
-            modifier = Modifier
-              .offset(y = 450.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Button(
-              colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xff50c2c9)
-              ),
-              modifier = Modifier.padding(horizontal = 8.dp),
-
-              onClick = { }) {
-              Text(text = "Cancel")
-            }
-            Spacer(modifier = Modifier.width(16.dp)) // Ajout d'un espace de 16dp entre les boutons
-
-            Button(
-              modifier = Modifier.padding(horizontal = 8.dp),
-              colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xff50c2c9)
-              ),
-              onClick = { }) {
-              Text(text = "Save")
-            }
+            )
           }
         }
       }
@@ -398,5 +286,106 @@ fun FilterDialog(modifier: Modifier = Modifier, onDismissRequest: () -> Unit) {
 }
 
 
+@Composable
+fun DropdownMenuField(
+  label: String,
+  options: List<String>,
+  selectedOption: String,
+  onOptionSelected: (String) -> Unit,
+  menuExpanded: Boolean,
+  onMenuExpandedChange: (Boolean) -> Unit,
+  icon: ImageVector = Icons.Default.ArrowDropDown,
+  maxDropdownHeight: Dp = 400.dp // Set the maximum height for the dropdown menu
+) {
+  Column {
+    Text(text = "$label:", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+    Box(
+      modifier = Modifier
+        .padding(top = 8.dp)
+        .clip(RoundedCornerShape(20.dp))
+        .background(Color(0xff50c2c9).copy(alpha = 0.5f))
+        .clickable { onMenuExpandedChange(true) }
+        .padding(16.dp)
+        .fillMaxWidth()
+    ) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(text = selectedOption)
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(imageVector = icon, contentDescription = null)
+      }
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .heightIn(max = maxDropdownHeight)
+      ) {
+        DropdownMenu(
+          expanded = menuExpanded,
+          onDismissRequest = { onMenuExpandedChange(false) },
+
+          modifier = Modifier
+            .heightIn(max = maxDropdownHeight)
+            .scrollable(rememberScrollState(), Orientation.Vertical)
+        ) {
+          options.forEach { option ->
+            DropdownMenuItem(
+              text = {
+                Text(text = option)
+
+              },
+              onClick = {
+                onOptionSelected(option)
+                onMenuExpandedChange(false)
+              }
+            )
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun DatePickerField(
+  label: String,
+  date: LocalDate,
+  onDateSelected: (LocalDate) -> Unit,
+  openDatePicker: MutableState<Boolean>
+) {
+  Column {
+    Text(text = "$label:", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+    Box(
+      modifier = Modifier
+        .padding(top = 8.dp)
+        .clip(RoundedCornerShape(20.dp))
+        .background(Color(0xff50c2c9).copy(alpha = 0.5f))
+        .clickable { openDatePicker.value = true }
+        .padding(16.dp)
+        .fillMaxWidth()
+    ) {
+      Text(text = date.format(DateTimeFormatter.ISO_DATE))
+    }
+    if (openDatePicker.value) {
+      CalendarDialog(
+        state = rememberUseCaseState(
+          visible = true,
+          onCloseRequest = { openDatePicker.value = false }
+        ),
+        config = CalendarConfig(
+          yearSelection = true,
+          style = CalendarStyle.MONTH
+        ),
+        selection = CalendarSelection.Date(
+          selectedDate = date
+        ) { newDate ->
+          onDateSelected(newDate)
+          openDatePicker.value = false
+        }
+      )
+    }
+  }
+}
 
 

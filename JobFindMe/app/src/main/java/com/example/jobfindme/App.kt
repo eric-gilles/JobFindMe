@@ -9,7 +9,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.jobfindme.ui.components.OfferScreen
 import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
 import com.example.jobfindme.ui.screens.EmployerForm
@@ -48,8 +47,6 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       EmployerForm(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
     composable("WelcomePage"){
-//      OfferScreen()
-      //SearchOffers(navController = navController, firebaseAuth = firebaseAuth);
       Welcome(navController = navController, firebaseAuth = firebaseAuth)
     }
     composable("Home"){
@@ -74,7 +71,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
     }
     composable("Search") {
-      Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+      //      OfferScreen()
+      SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore);
 
     }
     composable("Account") {
