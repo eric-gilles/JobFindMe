@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.R
 import com.example.jobfindme.data.OfferOutput
+import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.data.toOfferOutput
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.CrossedCirclesShapeWhite
@@ -126,7 +127,23 @@ fun SearchBar(
       ),
       singleLine = true
     )
-    IconButton(onClick = { Toast.makeText(context, "Not yet implemented",Toast.LENGTH_SHORT).show() }) {
+    IconButton(onClick = {
+      offersList.clear()
+      val offersCollection = firestore.collection("Offers")
+      offersCollection.get().addOnSuccessListener { documents ->
+        documents.forEach { document ->
+          CoroutineScope(Dispatchers.IO).launch {
+            val offer = document.toOfferOutput()
+            withContext(Dispatchers.Main) {
+              if(searchText.text!="Search an Offer" && offer.title == searchText.text ) { offersList.add(offer) }
+            }
+          }
+        }
+      }.addOnFailureListener { exception ->
+        Toast.makeText(context, exception.message.toString(), Toast.LENGTH_LONG).show()
+      }
+
+    }) {
       Image(
         painter = painterResource(id = R.drawable.loupe),
         contentDescription = "Search",
@@ -163,7 +180,7 @@ fun SearchBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "Range")
 @Composable
-fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore){
+fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, sharedOfferViewModel: SharedOfferViewModel){
   val screenWidth = LocalConfiguration.current.screenWidthDp.dp
   val context : Context = LocalContext.current
   var offersList = remember { mutableStateListOf<OfferOutput>() }
@@ -225,8 +242,8 @@ fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, fi
           .scrollable(rememberScrollState(), Orientation.Vertical)
 
       ) {
-        items(offersList) { offre ->
-          OffreCard(offre = offre)
+        items(offersList) { offer ->
+          OffreCard(offer=offer, firestore = firestore, firebaseAuth = firebaseAuth, navController = navController, sharedOfferViewModel = sharedOfferViewModel)
         }
       }
     }

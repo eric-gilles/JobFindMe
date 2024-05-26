@@ -1,6 +1,5 @@
 package com.example.jobfindme.ui.components
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,19 +21,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.jobfindme.data.OfferOutput
+import com.example.jobfindme.data.SharedOfferViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 
 @Composable
-fun OffreCard(offre: OfferOutput) {
+fun OffreCard(offer: OfferOutput, navController: NavController, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth, sharedOfferViewModel: SharedOfferViewModel) {
   val limit = 50
-  var showFullDescription by remember { mutableStateOf(offre.description.length <= limit) }
+  var showFullDescription by remember { mutableStateOf(offer.description.length <= limit) }
 
   fun limitDescription(description: String, maxLength: Int = limit): String {
     return if (description.length > maxLength) {
@@ -61,33 +63,38 @@ fun OffreCard(offre: OfferOutput) {
   ) {
     Column {
       Text(
-        text = offre.title,
+        text = offer.title,
         color = Color(0xff50c2c9),
         fontSize = 20.sp,
+        modifier = Modifier.clickable {
+          sharedOfferViewModel.addOffer(offer)
+          navController.navigate("OfferDetails")
+        }
+
       )
       Spacer(modifier = Modifier.height(8.dp))
       Text(
-        text = "Employer: ${offre.employerDetails.name}",
+        text = "Employer: ${offer.employerDetails.name}",
         color = Color(0xff000000),
         fontSize = 16.sp,
         textAlign = TextAlign.Justify
       )
       Spacer(modifier = Modifier.height(4.dp))
       Text(
-        text = "City: ${offre.city}",
+        text = "City: ${offer.city}",
         color = Color(0xff000000),
         fontSize = 14.sp,
         textAlign = TextAlign.Justify
       )
       Spacer(modifier = Modifier.height(4.dp))
       Text(
-        text = if (showFullDescription) offre.description else limitDescription(offre.description),
+        text = if (showFullDescription) offer.description else limitDescription(offer.description),
         color = Color(0xff000000),
         fontSize = 14.sp,
         overflow = TextOverflow.Ellipsis ,
         textAlign = TextAlign.Justify
       )
-      if (offre.description.length > limit) {
+      if (offer.description.length > limit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
           if (!showFullDescription) {
             Text(
@@ -113,5 +120,3 @@ fun OffreCard(offre: OfferOutput) {
     }
   }
 }
-
-

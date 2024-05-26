@@ -1,5 +1,9 @@
 package com.example.jobfindme.data
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +19,7 @@ data class Offer(
   val company: DocumentReference,
   val startingDate: Date,
   val endingDate: Date,
-  val jobApplications: List<JobApplication>)
+  val jobApplications: List<NewJobApplication>)
 
 data class OfferOutput(
   val id: String,
@@ -46,4 +50,11 @@ suspend fun DocumentSnapshot.toOfferOutput(): OfferOutput {
   offer.employerDetails = employerSnapshot.toEmployerOutput()
 
   return offer
+}
+class SharedOfferViewModel : ViewModel() {
+  var offer by mutableStateOf<OfferOutput?>(null)
+    private set
+  fun addOffer(newOffer: OfferOutput) {
+    offer = newOffer
+  }
 }

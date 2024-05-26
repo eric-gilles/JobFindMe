@@ -1,6 +1,7 @@
 package com.example.jobfindme.ui.components
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,6 +32,7 @@ fun LogoutButton(
   ) {
     Button(
       onClick = {
+        Log.d("Singout","Je pars !")
         navController.navigate("Signout")
       },
       modifier = Modifier.requiredSize(50.dp),

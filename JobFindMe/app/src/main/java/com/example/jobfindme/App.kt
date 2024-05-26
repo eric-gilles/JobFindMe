@@ -6,14 +6,17 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
 import com.example.jobfindme.ui.screens.EmployerForm
 import com.example.jobfindme.ui.screens.ErrorGPS
 import com.example.jobfindme.ui.screens.Login
+import com.example.jobfindme.ui.screens.OfferDetails
 import com.example.jobfindme.ui.screens.SearchOffers
 import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
@@ -28,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
   val navController = rememberNavController()
   val context: Context = LocalContext.current
+  val sharedOfferViewModel: SharedOfferViewModel = viewModel()
 
   NavHost(navController, startDestination = "WelcomePage") {
     composable("Signin") {
@@ -72,11 +76,19 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
     }
     composable("Search") {
       //      OfferScreen()
-      SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore);
+      SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel );
 
     }
     composable("Account") {
       Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+    }
+    composable("OfferDetails"){
+      OfferDetails(
+        navController = navController,
+        firestore = firestore,
+        firebaseAuth = firebaseAuth,
+        sharedOfferViewModel = sharedOfferViewModel
+      )
     }
 
   }

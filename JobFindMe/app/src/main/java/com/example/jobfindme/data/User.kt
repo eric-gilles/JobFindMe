@@ -12,5 +12,5 @@ data class User(
     val city : Address,
     val dateBirth : Date,
     val nationality : String,
-    val jobApplications : List<JobApplication>
+    val jobApplications : List<NewJobApplication>
 )
