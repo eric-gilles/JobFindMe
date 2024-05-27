@@ -77,17 +77,7 @@ fun BottomNav(modifier: Modifier = Modifier, navController: NavController) {
         .requiredWidth(width = 393.dp)
         .requiredHeight(height = 30.dp)
         .background(color = Color.White)
-    ) {
-      Box(
-        modifier = Modifier
-          .align(alignment = Alignment.BottomCenter)
-          .offset(x = 0.dp, y = (-8).dp)
-          .requiredWidth(width = 135.dp)
-          .requiredHeight(height = 5.dp)
-          .clip(shape = RoundedCornerShape(100.dp))
-          .background(color = Color(0xffb9c0c9))
-      )
-    }
+    )
   }
 }
 
