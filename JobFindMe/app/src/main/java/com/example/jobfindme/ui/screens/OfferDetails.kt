@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +43,7 @@ import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.example.jobfindme.ui.components.LogoutButton
+import com.example.jobfindme.ui.components.isCandidate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -110,23 +112,14 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
   }
 
 
-  var isCandidate by remember {
-    mutableStateOf(false)
+  val (isCandidate, setIsCandidate) = remember { mutableStateOf(false) }
+
+
+
+  if (userId != null) {
+    isCandidate(setIsCandidate,userId, firestore)
   }
 
-  LaunchedEffect(userId) {
-    val isUserCandidate = suspendCoroutine<Boolean> { continuation ->
-      if(userId!=null) {
-        val candidateDoc = firestore.collection("Users").document(userId)
-        candidateDoc.get().addOnSuccessListener { documentSnapshot ->
-          continuation.resume(documentSnapshot.exists())
-        }.addOnFailureListener { exception ->
-          continuation.resume(false)
-        }
-      }
-    }
-    isCandidate = isUserCandidate
-  }
   val heightScreen: Dp = if (isCandidate) 1100.dp else 1200.dp
   offerOutput?.let { offer ->
     Column(

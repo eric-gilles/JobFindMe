@@ -189,7 +189,7 @@ fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, fi
 
 
   @Composable
-  fun fetchOfferOnLoad(){
+  fun fetchOffersOnLoad(){
     LaunchedEffect(Unit) {
       val offersCollection = firestore.collection("Offers")
       offersCollection.get().addOnSuccessListener { documents ->
@@ -229,7 +229,7 @@ fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, fi
 
     ){
       SearchBar(firebaseAuth = firebaseAuth, firestore = firestore, offersList = offersList)
-      fetchOfferOnLoad()
+      fetchOffersOnLoad()
       val listHeight = if (offersList.size > 2) {
         (offersList.size * 160).dp
       } else {

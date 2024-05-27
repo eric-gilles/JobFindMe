@@ -5,18 +5,22 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.jobfindme.data.SharedOfferViewModel
+import com.example.jobfindme.ui.components.isCandidate
 import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
 import com.example.jobfindme.ui.screens.EmployerForm
 import com.example.jobfindme.ui.screens.ErrorGPS
 import com.example.jobfindme.ui.screens.Login
 import com.example.jobfindme.ui.screens.OfferDetails
+import com.example.jobfindme.ui.screens.OffersEmployer
 import com.example.jobfindme.ui.screens.SearchOffers
 import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
@@ -75,9 +79,17 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
     }
     composable("Search") {
-      //      OfferScreen()
-      SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel );
+      val (isCandidate, setIsCandidate) = remember { mutableStateOf(false) }
+      val userId = firebaseAuth.currentUser?.uid
 
+      if (userId!=null){
+        isCandidate(setIsCandidate, userId, firestore)
+        if (isCandidate) {
+          SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel );
+        } else {
+          OffersEmployer(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth, sharedOfferViewModel=sharedOfferViewModel)
+        }
+      }
     }
     composable("Account") {
       Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
