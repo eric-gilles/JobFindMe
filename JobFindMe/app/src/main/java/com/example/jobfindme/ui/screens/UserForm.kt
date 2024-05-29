@@ -55,7 +55,10 @@ import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalQueries.localDate
+import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,9 +107,10 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
       firebaseAuth.createUserWithEmailAndPassword(email.text, password.text)
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-
             val user = firebaseAuth.currentUser
             val userDocument = firestore.collection("Users").document(user?.uid ?: "")
+            val birthdateDate = Date.from(birthdate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
             val userData = hashMapOf(
               "email" to email.text,
               "firstname" to firstname.text,
@@ -114,7 +118,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
               "nationality" to nationality.text,
               "phone" to phone.text,
               "city" to city.text,
-              "birthdate" to birthdate.value
+              "birthdate" to birthdateDate
             )
             userDocument.set(userData)
               .addOnSuccessListener {

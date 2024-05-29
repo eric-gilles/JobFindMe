@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.jobfindme.data.NewJobApplication
 import com.example.jobfindme.data.OfferOutput
 import com.example.jobfindme.data.SharedOfferViewModel
@@ -252,7 +254,11 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
           }
 
           Button(
-            onClick = { /* Handle all applications action */ },
+            onClick = {
+              navController.navigate(
+                "CandidatureList/false",
+              )
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
             shape = RoundedCornerShape(50),
             modifier = Modifier
@@ -263,7 +269,11 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
           }
 
           Button(
-            onClick = { /* Handle applications accepted action */ },
+            onClick = {
+              navController.navigate(
+                "CandidatureList/true",
+              )
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
             shape = RoundedCornerShape(50),
             modifier = Modifier

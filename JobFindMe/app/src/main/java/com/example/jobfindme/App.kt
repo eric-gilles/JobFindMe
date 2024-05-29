@@ -9,11 +9,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.ui.components.isCandidate
+import com.example.jobfindme.ui.screens.CandidaturesList
 import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
 import com.example.jobfindme.ui.screens.EmployerForm
@@ -26,8 +29,6 @@ import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -102,7 +103,19 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
         sharedOfferViewModel = sharedOfferViewModel
       )
     }
+    composable("CandidatureList/{isAcceptedList}", arguments = listOf(navArgument("isAcceptedList") { type = NavType.BoolType })) { backStackEntry ->
 
+      val isAcceptedList: Boolean = backStackEntry.arguments?.getBoolean("isAcceptedList") == true
+      sharedOfferViewModel.offer?.let {
+        CandidaturesList(
+          firestore = firestore,
+          firebaseAuth = firebaseAuth,
+          offerOutput = it,
+          isAcceptedList = isAcceptedList,
+          navController = navController
+        )
+      }
+    }
   }
 }
 

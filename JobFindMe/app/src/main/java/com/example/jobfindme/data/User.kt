@@ -1,16 +1,32 @@
 package com.example.jobfindme.data
 
-import android.location.Address
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.google.firebase.firestore.DocumentSnapshot
+import java.io.Serializable
+import java.time.LocalDate
 import java.util.Date
 
 data class User(
-    val idUser : Long,
-    val name : String,
-    val firstName : String,
-    val mail : String,
-    val phoneNumber: Number,
-    val city : Address,
-    val dateBirth : Date,
-    val nationality : String,
-    val jobApplications : List<NewJobApplication>
+    var id: String,
+    val lastname: String,
+    val firstname: String,
+    val nationality: String,
+    val phone: String,
+    val city: String,
+    val email: String,
+    val birthdate: Date
 )
+suspend fun DocumentSnapshot.toUser(): User {
+
+    return User(
+        id = id,
+        firstname = getString("firstname") ?: "",
+        lastname = getString("lastname") ?: "",
+        nationality = getString("nationality") ?: "",
+        phone = getString("phone") ?: "",
+        city = getString("city") ?: "",
+        email = getString("email") ?: "",
+        birthdate = getDate("birthdate") ?: Date(),
+        )
+}

@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -130,7 +131,7 @@ fun WelcomeComponent(
         text = "Welcome, $fullName",
         color = Color.White,
         lineHeight = 6.43.em,
-        style = TextStyle(fontSize = 18.sp),
+        style = TextStyle(fontSize = 18.sp,textAlign = TextAlign.Center),
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
           .offset(x = 79.dp, y = 251.dp)
