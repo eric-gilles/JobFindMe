@@ -59,7 +59,7 @@ fun WelcomeComponent(
           val lastName = document.getString("lastname")
 
           if (firstName != null && lastName != null) {
-            fullName = "$firstName $lastName"
+            fullName = capitalizeFirstLetter(firstName) + " " + capitalizeFirstLetter(lastName)
           }
         }
       }.addOnFailureListener { exception ->
@@ -73,7 +73,7 @@ fun WelcomeComponent(
         if (document != null) {
           val companyName = document.getString("name")
           if (companyName != null ) {
-            fullName = companyName
+            fullName = capitalizeFirstLetter(companyName)
           }
         }
       }.addOnFailureListener { exception ->
@@ -137,5 +137,12 @@ fun WelcomeComponent(
           .offset(x = 79.dp, y = 251.dp)
       )
     }
+  }
+}
+
+
+fun capitalizeFirstLetter(str: String): String {
+  return str.replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase() else it.toString()
   }
 }
