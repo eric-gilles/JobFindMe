@@ -97,7 +97,7 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
               )
               candidaturesRef
                 .add(newApplication)
-                .addOnSuccessListener { documentReference ->
+                .addOnSuccessListener { _ ->
                   Toast.makeText(context,"Your candidature has successfully been sent", Toast.LENGTH_LONG).show()
                   navController.navigate("Home")
 

@@ -15,7 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.jobfindme.data.SharedOfferViewModel
-import com.example.jobfindme.ui.utils.isCandidate
+
 import com.example.jobfindme.ui.screens.CandidaturesList
 import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
@@ -29,6 +29,7 @@ import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
 import com.example.jobfindme.ui.components.ProfilCandidat
 import com.example.jobfindme.ui.components.ProfilEmployer
+import com.example.jobfindme.ui.components.isCandidate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
