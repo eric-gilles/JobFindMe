@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -57,9 +58,7 @@ import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalQueries.localDate
 import java.util.Date
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -148,34 +147,34 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
   ) {
     CrossedCirclesShapeBlue()
 
-      Box(
+    Box(
+      modifier = Modifier
+        .align(alignment = Alignment.TopStart)
+        .offset(x = 84.dp, y = 850.dp)
+        .requiredWidth(width = 207.dp)
+        .requiredHeight(height = 34.dp)
+    ) {
+      Button(
+        onClick = {
+          Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
         modifier = Modifier
-          .align(alignment = Alignment.TopStart)
-          .offset(x = 84.dp, y = 850.dp)
           .requiredWidth(width = 207.dp)
-          .requiredHeight(height = 34.dp)
-      ) {
-        Button(
-          onClick = {
-            Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+          .requiredHeight(height = 40.dp)){
+        Text(
+          lineHeight = 9.sp,
+          text = buildAnnotatedString {
+            withStyle(
+              style = SpanStyle(
+                color = Color.White,
+                fontSize = 16.sp
+              )
+            ) { append("Upload a CV *") }
           },
-          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-          modifier = Modifier
-            .requiredWidth(width = 207.dp)
-            .requiredHeight(height = 40.dp)){
-          Text(
-            lineHeight = 9.sp,
-            text = buildAnnotatedString {
-              withStyle(
-                style = SpanStyle(
-                  color = Color.White,
-                  fontSize = 16.sp
-                )
-              ) { append("Upload a CV *") }
-            },
-          )
-        }
+        )
       }
+    }
 
     Box(
       modifier = Modifier
@@ -239,14 +238,28 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           onValueChange = { email = it },
           label = {
             Text(
-              text = "Email *",
+              AnnotatedString.Builder("Email *").apply {
+                addStyle(
+                  style = SpanStyle(color = Color.Red),
+                  start = length - 1,
+                  end = length
+                )
+              }.toAnnotatedString(),
               fontSize = 18.sp
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
 
         OutlinedTextField(
@@ -255,14 +268,28 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           onValueChange = { firstname = it },
           label = {
             Text(
-              text = "First Name *",
+              AnnotatedString.Builder("First Name *").apply {
+                addStyle(
+                  style = SpanStyle(color = Color.Red),
+                  start = length - 1,
+                  end = length
+                )
+              }.toAnnotatedString(),
               fontSize = 18.sp
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
 
         OutlinedTextField(
@@ -271,15 +298,30 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           onValueChange = { lastname = it },
           label = {
             Text(
-              text = "Last Name *",
+              AnnotatedString.Builder("Last Name *").apply {
+                addStyle(
+                  style = SpanStyle(color = Color.Red),
+                  start = length - 1,
+                  end = length
+                )
+              }.toAnnotatedString(),
               fontSize = 18.sp
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
+
         TextField(
           modifier = Modifier.clickable {
             open.value = true
@@ -287,6 +329,11 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           enabled = false,
           value = birthdate.value.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ,
           onValueChange = {},
+          textStyle = TextStyle(
+            color = Color.Gray,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+          ),
           colors = TextFieldDefaults.outlinedTextFieldColors(
             disabledTextColor = MaterialTheme.colorScheme.onSurface,
             disabledBorderColor = MaterialTheme.colorScheme.outline,
@@ -321,9 +368,17 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
         OutlinedTextField(
           singleLine = true,
@@ -336,9 +391,17 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
 
         OutlinedTextField(
@@ -352,9 +415,17 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
 
         OutlinedTextField(
@@ -364,14 +435,28 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           visualTransformation = PasswordVisualTransformation(),
           label = {
             Text(
-              text = "Password *",
+              AnnotatedString.Builder("Password *").apply {
+                addStyle(
+                  style = SpanStyle(color = Color.Red),
+                  start = length - 1,
+                  end = length
+                )
+              }.toAnnotatedString(),
               fontSize = 18.sp
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
 
         OutlinedTextField(
@@ -382,14 +467,28 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
 
           label = {
             Text(
-              text = "Confirm Password *",
+              AnnotatedString.Builder("Confirm Password *").apply {
+                addStyle(
+                  style = SpanStyle(color = Color.Red),
+                  start = length - 1,
+                  end = length
+                )
+              }.toAnnotatedString(),
               fontSize = 18.sp
             )
           },
           textStyle = TextStyle(
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray
           ),
-          modifier = Modifier.padding(vertical = 4.dp)
+          modifier = Modifier.padding(vertical = 4.dp),
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray
+          )
         )
       }
     }
@@ -473,6 +572,3 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
     }
   }
 }
-
-
-

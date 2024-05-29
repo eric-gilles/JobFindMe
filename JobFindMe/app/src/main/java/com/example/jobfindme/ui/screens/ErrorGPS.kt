@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -86,6 +88,25 @@ fun ErrorGPS(modifier: Modifier = Modifier, navController: NavHostController) {
             textAlign = TextAlign.Center,
             style = TextStyle(fontSize = 16.sp),
             modifier = Modifier.requiredWidth(width = 325.dp))
+          Button(onClick = {
+            navController.navigate("WelcomePage")
+          },
+            colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xff50c2c9)
+          ),
+            modifier = Modifier
+              .requiredWidth(width = 326.dp)
+              .requiredHeight(height = 64.dp)
+          ) {
+            Text(
+              text = "Retry your location permission",
+              color = Color.White,
+              textAlign = TextAlign.Center,
+              style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold),
+              modifier = Modifier.requiredWidth(width = 326.dp))
+          }
         }
       }
     }

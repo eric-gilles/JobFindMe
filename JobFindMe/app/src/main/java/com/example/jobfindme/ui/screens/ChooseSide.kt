@@ -1,6 +1,6 @@
 package com.example.jobfindme.ui.screens
 
-import android.content.Context
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -83,6 +84,19 @@ fun ChooseSide(
           .align(alignment = Alignment.TopCenter)
           .offset(x = (-0.5).dp, y = 117.5999755859375.dp)
       )
+    Text(
+      text = "Choose your Side : Candidate or Employer",
+      color = Color.Gray,
+      textAlign = TextAlign.Center,
+      lineHeight = 6.25.em,
+      style = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        fontStyle = FontStyle.Italic),
+      modifier = Modifier
+        .align(alignment = Alignment.TopCenter)
+        .offset(x = (-0.5).dp, y = 150.dp)
+    )
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
