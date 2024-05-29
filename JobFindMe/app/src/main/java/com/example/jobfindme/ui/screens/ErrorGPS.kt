@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
@@ -32,19 +33,18 @@ fun ErrorGPS(modifier: Modifier = Modifier, navController: NavHostController) {
 
   Box(
     modifier = modifier
-      .requiredWidth(width =screenWidth)
-      .requiredHeight(height = 812.dp)
+      .fillMaxSize()
   ) {
     // Main content Box
     Box(
       modifier = Modifier
-        .requiredWidth(width = 375.dp)
+        .requiredWidth(width = screenWidth)
         .requiredHeight(height = 812.dp)
     ) {
       // Background Box
       Box(
         modifier = Modifier
-          .requiredWidth(width = 375.dp)
+          .requiredWidth(width = screenWidth)
           .requiredHeight(height = 812.dp)
           .background(color = Color(0xfff6f6f6))
       ) {
