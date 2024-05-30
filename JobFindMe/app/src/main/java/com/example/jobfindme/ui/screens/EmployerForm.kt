@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.jobfindme.data.CreateEmployer
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -77,13 +78,14 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
           if (task.isSuccessful) {
             val user = firebaseAuth.currentUser
             val employerDocument = firestore.collection("Employers").document(user?.uid ?: "")
-            val employerData = hashMapOf(
-              "email" to email.text,
-              "name" to companyName.text,
-              "address" to companyAddress.text,
-              "phone" to phone.text,
+            val employer = CreateEmployer(
+              name = companyName.text,
+              email = email.text,
+              address = companyAddress.text,
+              phone = phone.text,
+              links = hashMapOf<String,String>()
             )
-            employerDocument.set(employerData).addOnSuccessListener {
+            employerDocument.set(employer).addOnSuccessListener {
                 Toast.makeText(context, "User registered successfully", Toast.LENGTH_SHORT).show()
                 navController.navigate("WelcomePage")
             }.addOnFailureListener { e ->

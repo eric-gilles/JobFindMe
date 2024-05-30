@@ -6,7 +6,7 @@ import java.util.Date
 data class CreatedUser(
     var lastname: String,
     var firstname: String,
-    var nationality: String,
+    var nationality: String?,
     var phone: String?,
     var city: String?,
     var email: String,
@@ -17,7 +17,7 @@ data class User(
     var id: String,
     var lastname: String,
     var firstname: String,
-    var nationality: String,
+    var nationality: String?,
     var phone: String?,
     var city: String?,
     var email: String,

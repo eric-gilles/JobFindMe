@@ -61,13 +61,10 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
       .addOnCompleteListener{task ->
         if (task.isSuccessful){
           navController.navigate("Home")
-        } else {
-          //Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
         }
       }
       .addOnFailureListener { exception ->
-        //Toast.makeText(context,"Email or password incorrect",Toast.LENGTH_LONG).show()
-        Toast.makeText(context,exception.toString(),Toast.LENGTH_LONG).show()
+        Toast.makeText(context,exception.message.toString(),Toast.LENGTH_LONG).show()
 
       }
   }

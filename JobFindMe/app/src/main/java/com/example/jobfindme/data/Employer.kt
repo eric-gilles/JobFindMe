@@ -3,21 +3,20 @@ package com.example.jobfindme.data
 import com.google.firebase.firestore.DocumentSnapshot
 import java.util.Dictionary
 
-data class Employer(
-    val idCompany : Long,
-    val name : String,
-    val address : String,
-    val email : String,
-    val phone: String,
-    val links : Dictionary<String, String>,
-    val offers : List<Offer>)
-
 data class EmployerOutput(
-    val id : String,
-    val name : String,
-    val address : String,
+    val id: String,
+    val name: String,
+    val address: String,
     val phone: String,
-    val email : String
+    val email: String,
+    val links: Map<String, String>?
+)
+data class CreateEmployer(
+    val name: String,
+    val address: String,
+    val phone: String,
+    val email: String,
+    val links: Map<String, String>?
 )
 
 
@@ -26,7 +25,9 @@ fun DocumentSnapshot.toEmployerOutput(): EmployerOutput {
         id = id,
         name = getString("name") ?: "",
         address = getString("address") ?: "",
-        email = getString("mail") ?: "",
-        phone = getString("phone") ?: ""
+        email = getString("email") ?: "",
+        phone = getString("phone") ?: "",
+        links = get("links") as? Map<String, String> ?: emptyMap()
+
     )
 }
