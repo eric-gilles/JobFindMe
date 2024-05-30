@@ -1,8 +1,11 @@
 package com.example.jobfindme.ui.screens
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +23,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -27,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,33 +51,94 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.jobfindme.data.CreatedUser
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalQueries.localDate
 import java.util.Date
+
+class CvViewModel : ViewModel() {
+  private val _selectedPdfUri = MutableLiveData<Uri?>()
+  val selectedPdfUri: LiveData<Uri?> = _selectedPdfUri
+
+  fun setPdfUri(uri: Uri?) {
+    _selectedPdfUri.value = uri
+  }
+}
+
+@Composable
+fun UploadCvButton(viewModel: CvViewModel, ) {
+  val fileSelected = remember { mutableStateOf(false) }
+  val context: Context = LocalContext.current
+  val startForResult = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    viewModel.setPdfUri(uri)
+    fileSelected.value = uri != null
+
+    if (fileSelected.value) {
+      Toast.makeText(context, "CV successfully selected",Toast.LENGTH_SHORT).show()
+    } else {
+      Toast.makeText(context, "Error: File couldn't be selected",Toast.LENGTH_SHORT).show()
+    }
+  }
+
+
+
+
+  Box {
+    Button(
+      onClick = {
+        startForResult.launch("application/pdf")
+      },
+      colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+      modifier = Modifier
+        .requiredWidth(width = 207.dp)
+        .requiredHeight(height = 40.dp)
+    ) {
+      Text(
+        lineHeight = 9.sp,
+        text = buildAnnotatedString {
+          withStyle(
+            style = SpanStyle(
+              color = Color.White,
+              fontSize = 16.sp
+            )
+          ) { append("Upload a CV *") }
+        },
+      )
+    }
+  }
+}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UserForm(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth) {
+fun UserForm(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore,
+             firebaseAuth: FirebaseAuth, firebaseStorage: FirebaseStorage, viewModel: CvViewModel = viewModel()) {
 
   var email by remember { mutableStateOf(TextFieldValue()) }
   var firstname by remember { mutableStateOf(TextFieldValue()) }
   var lastname by remember { mutableStateOf(TextFieldValue()) }
   var nationality by remember { mutableStateOf(TextFieldValue()) }
-  val birthdate = remember { mutableStateOf(LocalDate.now())}
-  val open = remember { mutableStateOf(false)}
+  val birthdate = remember { mutableStateOf(LocalDate.now()) }
+  val open = remember { mutableStateOf(false) }
+
 
 
   var city by remember { mutableStateOf(TextFieldValue()) }
@@ -83,10 +150,11 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
 
 
   fun validateFields(): Boolean {
-    if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || firstname.text.isBlank() || lastname.text.isBlank()) {
+    val pdfUri = viewModel.selectedPdfUri.value
+    if (password.text.isBlank() || confirm.text.isBlank() || email.text.isBlank() || firstname.text.isBlank() || lastname.text.isBlank() || pdfUri == null) {
       Toast.makeText(
         context,
-        "All fields must be filled.",
+        "All fields with (*) must be filled.",
         Toast.LENGTH_SHORT
       ).show()
       return false
@@ -102,33 +170,49 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
     return true
   }
 
-  fun createUserAndAuthenticate() {
+  fun createUserAndAuthenticate(viewModel: CvViewModel) {
     if (validateFields()) {
+
       firebaseAuth.createUserWithEmailAndPassword(email.text, password.text)
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             val user = firebaseAuth.currentUser
-            val userDocument = firestore.collection("Users").document(user?.uid ?: "")
-            val birthdateDate = Date.from(birthdate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+            val pdfUri = viewModel.selectedPdfUri.value
+            val storageRef = firebaseStorage.reference
+            val pdfRef = if(user?.uid !=null) storageRef.child("pdfs/${user.uid}.pdf") else {
+              Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+              return@addOnCompleteListener
+            }
 
-            val userData = hashMapOf(
-              "email" to email.text,
-              "firstname" to firstname.text,
-              "lastname" to lastname.text,
-              "nationality" to nationality.text,
-              "phone" to phone.text,
-              "city" to city.text,
-              "birthdate" to birthdateDate
-            )
-            userDocument.set(userData)
-              .addOnSuccessListener {
-                Toast.makeText(context, "User registered successfully", Toast.LENGTH_SHORT).show()
 
-                navController.navigate("WelcomePage")
-              }
-              .addOnFailureListener { e ->
-                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-              }
+            pdfUri?.let {
+              pdfRef.putFile(it)
+                .addOnSuccessListener {
+                  val userDocument = firestore.collection("Users").document(user?.uid ?: "")
+                  val birthdateDate = Date.from(birthdate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+                  val userData = CreatedUser(
+                    email = email.text,
+                    firstname = firstname.text,
+                    lastname = lastname.text,
+                    nationality = nationality.text,
+                    phone = phone.text,
+                    city = city.text,
+                    birthdate = birthdateDate,
+                    uriCV = "CVs/${user.uid}.pdf"
+                  )
+                  userDocument.set(userData)
+                    .addOnSuccessListener {
+                      Toast.makeText(context, "User registered successfully", Toast.LENGTH_SHORT).show()
+                      navController.navigate("Home")
+                    }
+                    .addOnFailureListener {
+                      Toast.makeText(context, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }                }
+                .addOnFailureListener {
+                  Toast.makeText(context, "Error: ${it.message}", Toast.LENGTH_SHORT).show()              }
+            }
+
           } else {
             Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
           }
@@ -155,26 +239,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)
       ) {
-        Button(
-          onClick = {
-            Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
-          },
-          colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-          modifier = Modifier
-            .requiredWidth(width = 207.dp)
-            .requiredHeight(height = 40.dp)){
-          Text(
-            lineHeight = 9.sp,
-            text = buildAnnotatedString {
-              withStyle(
-                style = SpanStyle(
-                  color = Color.White,
-                  fontSize = 16.sp
-                )
-              ) { append("Upload a CV *") }
-            },
-          )
-        }
+        UploadCvButton(viewModel = viewModel)
       }
 
     Box(
@@ -403,7 +468,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
     ) {
       Button(
         onClick = {
-          createUserAndAuthenticate()
+          createUserAndAuthenticate(viewModel)
 
         },
         colors = ButtonDefaults.buttonColors(

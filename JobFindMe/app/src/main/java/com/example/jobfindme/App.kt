@@ -29,11 +29,12 @@ import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
+fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorage: FirebaseStorage) {
   val navController = rememberNavController()
   val context: Context = LocalContext.current
   val sharedOfferViewModel: SharedOfferViewModel = viewModel()
@@ -47,7 +48,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
       //redirige vers les offres pour les anonymes
     }
     composable("Signup/user") {
-      UserForm(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth)
+      UserForm(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth, firebaseStorage = firebaseStorage)
     }
     composable("Choose") {
       ChooseSide(navController = navController)

@@ -99,8 +99,7 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
                 .add(newApplication)
                 .addOnSuccessListener { documentReference ->
                   Toast.makeText(context,"Your candidature has successfully been sent", Toast.LENGTH_LONG).show()
-                  navController.navigate("Home")
-
+                  navController.navigate("Search")
                 }
             } else {
               Toast.makeText(context,"Already applied for this offer", Toast.LENGTH_LONG).show()
@@ -186,7 +185,8 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
         Text(
           text = offer.description,
           fontSize = 16.sp,
-          color = Color.Black
+          color = Color.Black,
+          textAlign = TextAlign.Justify
         )
       }
 
