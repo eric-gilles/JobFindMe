@@ -15,7 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.jobfindme.data.SharedOfferViewModel
-import com.example.jobfindme.ui.components.isCandidate
+
 import com.example.jobfindme.ui.screens.CandidaturesList
 import com.example.jobfindme.ui.screens.Home
 import com.example.jobfindme.ui.screens.ChooseSide
@@ -27,6 +27,9 @@ import com.example.jobfindme.ui.screens.OffersEmployer
 import com.example.jobfindme.ui.screens.SearchOffers
 import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
+import com.example.jobfindme.ui.components.ProfilCandidat
+import com.example.jobfindme.ui.components.ProfilEmployer
+import com.example.jobfindme.ui.components.isCandidate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -38,6 +41,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
   val navController = rememberNavController()
   val context: Context = LocalContext.current
   val sharedOfferViewModel: SharedOfferViewModel = viewModel()
+  val (isCandidate, setIsCandidate) = remember { mutableStateOf(false) }
+  val userId = firebaseAuth.currentUser?.uid
 
   NavHost(navController, startDestination = "WelcomePage") {
     composable("Signin") {
@@ -57,7 +62,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
       EmployerForm(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }
     composable("WelcomePage"){
-      Welcome(navController = navController, firebaseAuth = firebaseAuth)
+      Welcome(navController = navController, firebaseAuth = firebaseAuth, context = context)
     }
     composable("Home"){
       if (firebaseAuth.currentUser != null) {
@@ -81,20 +86,24 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
       Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
     }
     composable("Search") {
-      val (isCandidate, setIsCandidate) = remember { mutableStateOf(false) }
-      val userId = firebaseAuth.currentUser?.uid
-
       if (userId!=null){
         isCandidate(setIsCandidate, userId, firestore)
         if (isCandidate) {
-          SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel );
+          SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel)
         } else {
-          OffersEmployer(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth, sharedOfferViewModel=sharedOfferViewModel)
+          OffersEmployer(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth, sharedOfferViewModel = sharedOfferViewModel)
         }
       }
     }
     composable("Account") {
-      Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+      if (userId!=null){
+        isCandidate(setIsCandidate, userId, firestore)
+        if (isCandidate) {
+            ProfilCandidat(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
+        } else {
+            ProfilEmployer(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
+        }
+      }
     }
     composable("OfferDetails"){
       OfferDetails(

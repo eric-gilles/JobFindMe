@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -161,13 +162,19 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             onValueChange = { companyName = it },
             label = {
               Text(
-                text = "Company Name *",
-                fontSize = 14.sp
+                AnnotatedString.Builder("Company Name *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
+                fontSize = 18.sp
               )
             },
 
             textStyle = TextStyle(
-              fontSize = 14.sp
+              fontSize = 18.sp
             ),
             singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -177,12 +184,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             onValueChange = { companyAddress = it },
             label = {
               Text(
-                text = "Company Address *",
-                fontSize = 14.sp
+                AnnotatedString.Builder("Company Address *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
+                fontSize = 18.sp
               )
             },
             textStyle = TextStyle(
-              fontSize = 14.sp
+              fontSize = 18.sp
             ),
             singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -192,13 +205,19 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             onValueChange = { email = it },
             label = {
               Text(
-                text = "Email *",
-                fontSize = 14.sp
+                AnnotatedString.Builder("Email *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
+                fontSize = 18.sp
               )
             },
             singleLine = true,
             textStyle = TextStyle(
-              fontSize = 14.sp
+              fontSize = 18.sp
             ),
             modifier = Modifier.padding(vertical = 4.dp)
           )
@@ -208,12 +227,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             onValueChange = { phone = it },
             label = {
               Text(
-                text = "Phone *",
-                fontSize = 14.sp
+                AnnotatedString.Builder("Phone *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
+                fontSize = 18.sp
               )
             },
             textStyle = TextStyle(
-              fontSize = 14.sp
+              fontSize = 18.sp
             ),
             singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -225,12 +250,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             visualTransformation = PasswordVisualTransformation(),
             label = {
               Text(
-                text = "Password *",
-                fontSize = 14.sp
+                AnnotatedString.Builder("Password *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
+                fontSize = 18.sp
               )
             },
             textStyle = TextStyle(
-              fontSize = 14.sp
+              fontSize = 18.sp
             ),
             singleLine = true,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -241,12 +272,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             visualTransformation = PasswordVisualTransformation(),
             label = {
               Text(
-                text = "Confirm password *",
-                fontSize = 14.sp
+                AnnotatedString.Builder("Confirm Password *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
+                fontSize = 18.sp
               )
             },
             textStyle = TextStyle(
-              fontSize = 14.sp
+              fontSize = 18.sp
             ),
             modifier = Modifier.padding(vertical = 4.dp),
             singleLine = true,

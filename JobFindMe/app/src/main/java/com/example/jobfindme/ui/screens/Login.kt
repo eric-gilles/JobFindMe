@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -47,8 +50,8 @@ import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun Login( modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
   var email by remember { mutableStateOf(TextFieldValue()) }
   var password by remember { mutableStateOf(TextFieldValue()) }
@@ -77,12 +80,12 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
   ) {
     Box(
       modifier = Modifier
-        .requiredWidth(width = 375.dp)
+        .requiredWidth(width = screenWidth)
         .requiredHeight(height = 812.dp)
     ) {
       Box(
         modifier = Modifier
-          .requiredWidth(width = 375.dp)
+          .requiredWidth(width = screenWidth)
           .requiredHeight(height = 812.dp)
           .background(color = Color(0xfff6f6f6))
       ) {
@@ -90,7 +93,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
 
         Image(
           painter = painterResource(id = R.drawable.app_logo_rounded),
-          contentDescription = "Color logo with background 6",
+          contentDescription = "Color logo with background",
           modifier = Modifier
             .align(alignment = Alignment.TopCenter)
             .offset(x = (-0.25).dp, y = 150.dp)
@@ -130,14 +133,28 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
             onValueChange = { email = it },
             label = {
               Text(
-                text = "Email *",
+                AnnotatedString.Builder("Email *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
                 fontSize = 18.sp
               )
             },
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
           OutlinedTextField(
             singleLine = true,
@@ -146,14 +163,28 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
             visualTransformation = PasswordVisualTransformation(),
             label = {
               Text(
-                text = "Password *",
+                AnnotatedString.Builder("Password *").apply {
+                  addStyle(
+                    style = SpanStyle(color = Color.Red),
+                    start = length - 1,
+                    end = length
+                  )
+                }.toAnnotatedString(),
                 fontSize = 18.sp
               )
             },
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
         }
       }

@@ -13,7 +13,7 @@ fun isCandidate(setValue: (Boolean) -> Unit, userId: String, firestore: Firebase
       val candidateDoc = firestore.collection("Users").document(userId)
       candidateDoc.get().addOnSuccessListener { documentSnapshot ->
         continuation.resume(documentSnapshot.exists())
-      }.addOnFailureListener { exception ->
+      }.addOnFailureListener {
         continuation.resume(false)
       }
     }
