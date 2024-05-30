@@ -30,6 +30,7 @@ import com.example.jobfindme.ui.screens.Welcome
 import com.example.jobfindme.ui.components.ProfilCandidat
 import com.example.jobfindme.ui.components.ProfilEmployer
 import com.example.jobfindme.ui.components.isCandidate
+import com.example.jobfindme.ui.screens.FormJob
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -125,6 +126,12 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
           navController = navController
         )
       }
+    }
+    composable("ModifyOffer") {
+      FormJob(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, addOffer = false)
+    }
+    composable("NewOffer") {
+      FormJob(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, addOffer = true)
     }
   }
 }
