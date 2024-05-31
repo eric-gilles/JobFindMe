@@ -1,4 +1,4 @@
-package com.example.jobfindme.ui.components
+package com.example.jobfindme.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

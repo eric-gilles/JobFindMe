@@ -20,12 +20,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -37,22 +33,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.example.jobfindme.data.NewJobApplication
 import com.example.jobfindme.data.OfferOutput
 import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.example.jobfindme.ui.components.LogoutButton
-import com.example.jobfindme.ui.components.isCandidate
+import com.example.jobfindme.ui.utils.isCandidate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
