@@ -30,7 +30,8 @@ import com.example.jobfindme.ui.screens.UserForm
 import com.example.jobfindme.ui.screens.Welcome
 import com.example.jobfindme.ui.components.ProfilCandidat
 import com.example.jobfindme.ui.components.ProfilEmployer
-import com.example.jobfindme.ui.components.isCandidate
+import com.example.jobfindme.ui.components.WelcomeComponent
+import com.example.jobfindme.ui.utils.isCandidate
 import com.example.jobfindme.ui.screens.CandidatureResponse
 import com.example.jobfindme.ui.screens.FormJob
 import com.google.firebase.auth.FirebaseAuth
@@ -54,6 +55,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
     }
     composable("Signin/anonymous") {
       firebaseAuth.signInAnonymously()
+      WelcomeComponent(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
       //redirige vers les offres pour les anonymes
     }
     composable("Signup/user") {
