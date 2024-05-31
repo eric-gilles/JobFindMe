@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.jobfindme.data.EmployerOutput
+import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.data.toEmployerOutput
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.ModifyOffer
@@ -24,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FormJob(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth, addOffer : Boolean) {
+fun FormJob(modifier: Modifier = Modifier, navController: NavController, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth, addOffer : Boolean, sharedOfferViewModel: SharedOfferViewModel) {
 
   Scaffold(
     bottomBar = {
@@ -35,7 +36,7 @@ fun FormJob(modifier: Modifier = Modifier, navController: NavController, firesto
     if (addOffer){
       NewOffer(navController= navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }else {
-      ModifyOffer(navController= navController, firebaseAuth = firebaseAuth, firestore = firestore)
+      ModifyOffer(navController= navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel)
     }
   }
 }

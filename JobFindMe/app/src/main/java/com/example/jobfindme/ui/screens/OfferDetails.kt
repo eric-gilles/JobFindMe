@@ -60,7 +60,7 @@ fun OfferDetails(navController: NavController, firestore: FirebaseFirestore, fir
   ){
     Box(modifier= Modifier.verticalScroll(rememberScrollState())){
 
-      Details(navController= navController, offerOutput = offer, firestore= firestore, firebaseAuth = firebaseAuth)
+      Details(navController= navController, offerOutput = offer, firestore= firestore, firebaseAuth = firebaseAuth, sharedOfferViewModel = sharedOfferViewModel)
       CrossedCirclesShapeBlue()
       LogoutButton(navController = navController)
     }
@@ -68,7 +68,7 @@ fun OfferDetails(navController: NavController, firestore: FirebaseFirestore, fir
 }
 
 @Composable
-fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
+fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, sharedOfferViewModel : SharedOfferViewModel) {
   val userId = firebaseAuth.currentUser?.uid
   val context: Context = LocalContext.current
 
@@ -215,7 +215,7 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
                 text = "Contact",
                 color = Color.White,
                 fontSize = 18.sp
-              ) // Ajustez la taille du texte ici
+              )
             }
             Button(
               onClick = {
@@ -237,7 +237,8 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
 
             Button(
               onClick = {
-
+                sharedOfferViewModel.addOffer(offer)
+                navController.navigate("JobForm/false")
               },
               colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
               shape = RoundedCornerShape(50),
@@ -276,6 +277,29 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
                 .fillMaxWidth()
             ) {
               Text(text = "Applications Accepted", color = Color.White, fontSize = 18.sp)
+            }
+            Button(
+              onClick = {
+                val offerRef = firestore.collection("Offers").document(offer.id)
+
+                offerRef.delete().addOnSuccessListener {
+                  Toast.makeText(context,"This offer has been successfully deleted",Toast.LENGTH_LONG).show()
+
+                  navController.navigate("Search") {
+                    popUpTo("OfferDetails") { inclusive = true }
+                  }
+                }
+                  .addOnFailureListener {
+                    Toast.makeText(context,it.message.toString(),Toast.LENGTH_LONG).show()
+                  }
+              },
+              colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+              shape = RoundedCornerShape(50),
+              modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+            ) {
+              Text(text = "Delete this offer", color = Color.White, fontSize = 18.sp)
             }
           }
         }

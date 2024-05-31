@@ -121,14 +121,14 @@ fun ProfilCandidat(
         }
     }
 
-    user?.let { CandidatesProfileContent(it) }
+    user?.let { CandidatesProfileContent(it, firebaseAuth) }
 }
 
 
 
 
 @Composable
-fun CandidatesProfileContent(user: User) {
+fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
     val context: Context = LocalContext.current
 
 
@@ -274,6 +274,18 @@ fun CandidatesProfileContent(user: User) {
                             .clip(shape = CircleShape)
                             .background(color = Color(0xff50c2c9))
                             .offset(x = 50.dp, y = 12.dp)
+                            .clickable {
+
+                                firebaseAuth.sendPasswordResetEmail(user.email).addOnCompleteListener { task ->
+                                    if(task.isSuccessful){
+                                        Toast.makeText(context,"Email send to "+user.email, Toast.LENGTH_LONG).show()
+                                        return@addOnCompleteListener
+                                    }
+                                }.addOnFailureListener{ e ->
+                                    Toast.makeText(context,e.message, Toast.LENGTH_LONG).show()
+                                    return@addOnFailureListener
+                                }
+                            }
 
                     ) {
                         Text(

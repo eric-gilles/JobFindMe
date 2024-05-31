@@ -187,7 +187,6 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
               pdfUri.let {
                 pdfRef.putFile(it)
                   .addOnSuccessListener {
-                    Log.d("UploadFile","Réussie")
                     val userDocument = firestore.collection("Users").document(userAuth.uid ?: "")
                     val birthdateDate =
                       Date.from(birthdate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())

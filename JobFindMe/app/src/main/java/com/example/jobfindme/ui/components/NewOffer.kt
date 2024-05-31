@@ -112,7 +112,7 @@ fun NewOffer(
                         city= city
                     )
                     firestore.collection("Offers").add(newOffer).addOnSuccessListener {
-                        Toast.makeText(context, "Offer created successfully", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Offer has been created successfully", Toast.LENGTH_LONG).show()
                         navController.navigate("Search") {
                             popUpTo("JobForm/true") { inclusive = true }
                         }

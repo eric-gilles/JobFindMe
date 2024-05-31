@@ -117,7 +117,7 @@ fun ProfilEmployer(
             Text(text = "Erreur : ${error}")
         }
         employer != null -> {
-            EmployerProfileContent(employer = employer!!)
+            EmployerProfileContent(employer = employer!!, firebaseAuth = firebaseAuth)
         }
         else -> {
             Toast.makeText(context, "User not connected", Toast.LENGTH_LONG).show()
@@ -127,7 +127,7 @@ fun ProfilEmployer(
 }
 
 @Composable
-fun EmployerProfileContent(employer: EmployerOutput) {
+fun EmployerProfileContent(employer: EmployerOutput, firebaseAuth: FirebaseAuth) {
     var links by remember { mutableStateOf(employer.links) }
     val context: Context = LocalContext.current
 
@@ -276,6 +276,17 @@ fun EmployerProfileContent(employer: EmployerOutput) {
                         .clip(shape = CircleShape)
                         .background(color = Color(0xff50c2c9))
                         .offset(x = 50.dp, y = 12.dp)
+                        .clickable {
+                            firebaseAuth.sendPasswordResetEmail(employer.email).addOnCompleteListener { task ->
+                                if(task.isSuccessful){
+                                    Toast.makeText(context,"Email send to "+employer.email, Toast.LENGTH_LONG).show()
+                                    return@addOnCompleteListener
+                                }
+                            }.addOnFailureListener{ e ->
+                                Toast.makeText(context,e.message, Toast.LENGTH_LONG).show()
+                                return@addOnFailureListener
+                            }
+                        }
 
                 ) {
                     Text(

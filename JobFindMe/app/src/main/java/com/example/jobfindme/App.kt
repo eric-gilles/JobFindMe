@@ -140,7 +140,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
           navController = navController,
           firestore = firestore,
           firebaseAuth = firebaseAuth,
-          addOffer = isNew
+          addOffer = isNew,
+          sharedOfferViewModel = sharedOfferViewModel
         )
       } else {
         navController.navigate("Choose")
@@ -189,7 +190,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
           navController = navController,
           firebaseAuth = firebaseAuth,
           firestore = firestore,
-          addOffer = false
+          addOffer = false,
+          sharedOfferViewModel = sharedOfferViewModel
         )
       } else {
         navController.navigate("Choose")
@@ -201,7 +203,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
           navController = navController,
           firebaseAuth = firebaseAuth,
           firestore = firestore,
-          addOffer = true
+          addOffer = true,
+          sharedOfferViewModel = sharedOfferViewModel
         )
       } else {
         navController.navigate("Choose")
