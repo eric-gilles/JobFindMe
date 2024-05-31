@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.jobfindme.data.SharedOfferViewModel
+import com.example.jobfindme.data.SharedUserViewModel
 
 import com.example.jobfindme.ui.screens.CandidaturesList
 import com.example.jobfindme.ui.screens.Home
@@ -30,6 +31,7 @@ import com.example.jobfindme.ui.screens.Welcome
 import com.example.jobfindme.ui.components.ProfilCandidat
 import com.example.jobfindme.ui.components.ProfilEmployer
 import com.example.jobfindme.ui.components.isCandidate
+import com.example.jobfindme.ui.screens.CandidatureResponse
 import com.example.jobfindme.ui.screens.FormJob
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,6 +46,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
   val sharedOfferViewModel: SharedOfferViewModel = viewModel()
   val (isCandidate, setIsCandidate) = remember { mutableStateOf(false) }
   val userId = firebaseAuth.currentUser?.uid
+  val sharedUserViewModel: SharedUserViewModel = viewModel()
 
   NavHost(navController, startDestination = "WelcomePage") {
     composable("Signin") {
@@ -123,8 +126,24 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
           firebaseAuth = firebaseAuth,
           offerOutput = it,
           isAcceptedList = isAcceptedList,
-          navController = navController
+          navController = navController,
+          sharedUserViewModel = sharedUserViewModel
         )
+      }
+    }
+    composable("CandidatureResponse/{isAcceptedList}", arguments = listOf(navArgument("isAcceptedList") { type = NavType.BoolType })) { backStackEntry ->
+      val isAcceptedList: Boolean = backStackEntry.arguments?.getBoolean("isAcceptedList") == true
+      val user = sharedUserViewModel.user
+      val offer = sharedOfferViewModel.offer
+      if (user != null && offer != null){
+          CandidatureResponse(
+            firestore = firestore,
+            firebaseAuth = firebaseAuth,
+            offerOutput = offer,
+            isAcceptedList = isAcceptedList,
+            navController = navController,
+            user = user
+          )
       }
     }
     composable("ModifyOffer") {

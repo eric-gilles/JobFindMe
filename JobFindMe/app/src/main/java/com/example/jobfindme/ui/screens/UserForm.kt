@@ -200,7 +200,7 @@ fun UserForm(modifier: Modifier = Modifier, navController: NavController, firest
                       phone = phone.text,
                       city = city.text,
                       birthdate = birthdateDate,
-                      uriCV = "CVs/${userAuth.uid}.pdf"
+                      uriCV = "pdfs/${userAuth.uid}.pdf"
                     )
                     userDocument.set(userData)
                       .addOnSuccessListener {

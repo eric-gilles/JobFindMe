@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.data.OfferOutput
+import com.example.jobfindme.data.SharedUserViewModel
 import com.example.jobfindme.data.User
 import com.example.jobfindme.data.toUser
 import com.example.jobfindme.ui.components.BottomNav
@@ -82,7 +83,7 @@ fun Title(
 @Composable
 fun CandidaturesList(modifier: Modifier = Modifier, firestore: FirebaseFirestore,
                      firebaseAuth: FirebaseAuth, offerOutput: OfferOutput,
-                     isAcceptedList: Boolean, navController:NavController){
+                     isAcceptedList: Boolean, navController:NavController, sharedUserViewModel: SharedUserViewModel){
 
 
   val offerId = offerOutput.id
@@ -139,9 +140,9 @@ fun CandidaturesList(modifier: Modifier = Modifier, firestore: FirebaseFirestore
           users = users,
           offerOutput = offerOutput,
           isAcceptedList= isAcceptedList,
-          onItemClick = {
-          Toast.makeText(context, "Not yet Implemented",Toast.LENGTH_LONG).show()
-        })
+          sharedUserViewModel = sharedUserViewModel,
+          navController = navController
+          )
       }
       CrossedCirclesShapeBlue()
       LogoutButton(navController = navController)
@@ -151,7 +152,7 @@ fun CandidaturesList(modifier: Modifier = Modifier, firestore: FirebaseFirestore
 
 
 @Composable
-fun UserList(users: List<User>,offerOutput: OfferOutput, isAcceptedList:Boolean, onItemClick: (User) -> Unit) {
+fun UserList(users: List<User>,offerOutput: OfferOutput, isAcceptedList:Boolean, sharedUserViewModel: SharedUserViewModel, navController: NavController) {
   Column(modifier = Modifier
     .padding(horizontal = 16.dp, vertical = 25.dp)
   ) {
@@ -194,7 +195,10 @@ fun UserList(users: List<User>,offerOutput: OfferOutput, isAcceptedList:Boolean,
         modifier = Modifier.fillMaxWidth().height(120.dp*users.size)
       ) {
         users.forEach { user ->
-          UserItem(user = user, onItemClick = onItemClick)
+          UserItem(user = user, onItemClick = {
+            sharedUserViewModel.addUser(user)
+            navController.navigate("CandidatureResponse/$isAcceptedList")
+          })
           Spacer(modifier = Modifier.height(16.dp))
         }
       }
@@ -233,3 +237,4 @@ fun ArrowIcon(imageVector: ImageVector) {
     modifier = Modifier.size(24.dp)
   )
 }
+
