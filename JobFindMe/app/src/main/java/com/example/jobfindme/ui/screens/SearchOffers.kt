@@ -219,13 +219,13 @@ fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, fi
       LogoutButton(navController = navController)
     },
     bottomBar = {
-      BottomNav(navController= navController)
+      if (firebaseAuth.currentUser != null) {
+        BottomNav(navController = navController)
+      }
     }
   ){
     Box(
-      modifier=Modifier
-        .offset(y = 180.dp)
-
+      modifier=Modifier.offset(y = 180.dp)
     ){
       SearchBar(firebaseAuth = firebaseAuth, firestore = firestore, offersList = offersList)
       fetchOffersOnLoad()

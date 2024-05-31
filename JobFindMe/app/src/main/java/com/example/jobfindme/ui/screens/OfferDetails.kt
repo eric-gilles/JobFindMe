@@ -55,7 +55,9 @@ fun OfferDetails(navController: NavController, firestore: FirebaseFirestore, fir
 
   Scaffold(
     bottomBar = {
-      BottomNav(navController= navController)
+      if (firebaseAuth.currentUser != null) {
+        BottomNav(navController = navController)
+      }
     }
   ){
     Box(modifier= Modifier.verticalScroll(rememberScrollState())){

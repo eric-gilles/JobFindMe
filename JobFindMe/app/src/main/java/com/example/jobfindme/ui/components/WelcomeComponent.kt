@@ -154,35 +154,6 @@ fun WelcomeComponent(
     }
 
     if (anonymousUser) {
-//      Box(
-//        modifier = Modifier
-//          .fillMaxWidth()
-//          .align(Alignment.Center)
-//          .offset(x = 20.dp, y = 90.dp)
-//          .clickable {
-//            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
-//          }
-//      ) {
-//        Box(
-//          modifier = Modifier
-//            .requiredWidth(270.dp)
-//            .requiredHeight(47.dp)
-//            .clip(CircleShape)
-//            .background(Color(0xff50c2c9))
-//        ) {
-//          Text(
-//            text = "View Offers",
-//            color = Color.White,
-//            lineHeight = 8.33.em,
-//            style = TextStyle(
-//              fontSize = 18.sp,
-//              fontWeight = FontWeight.Bold
-//            ),
-//            textAlign = TextAlign.Center,
-//            modifier = Modifier.requiredHeight(26.dp)
-//          )
-//        }
-//      }
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
