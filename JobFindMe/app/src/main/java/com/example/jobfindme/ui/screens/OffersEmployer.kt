@@ -6,21 +6,26 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,9 +35,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -42,14 +48,10 @@ import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.data.toOfferOutput
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
-import com.example.jobfindme.ui.components.LogoutButton
 import com.example.jobfindme.ui.components.OffreCard
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.tasks.await
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -59,94 +61,100 @@ fun OffersEmployer(modifier:Modifier = Modifier, navController: NavController, f
   var offersList = remember { mutableStateListOf<OfferOutput>() }
   val userId = firebaseAuth.currentUser?.uid
   val context: Context = LocalContext.current
-  val heightScreen = LocalConfiguration.current.screenHeightDp.dp
+
 
 
   @Composable
   fun fetchOffersOnLoad() {
-    if (userId != null)
+    if (userId != null) {
       LaunchedEffect(Unit) {
         val offersCollection = firestore.collection("Offers")
-        offersCollection.get().addOnSuccessListener { documents ->
+        try {
+          val documents = offersCollection.get().await()
+          offersList.clear()
           documents.forEach { document ->
-            CoroutineScope(Dispatchers.IO).launch {
-              val offer = document.toOfferOutput()
-              withContext(Dispatchers.Main) {
-                if (offer.employerDetails.id == userId)
-                  offersList.add(offer)
-              }
+            val offer = document.toOfferOutput()
+            if (offer.employerDetails.id == userId) {
+              offersList.add(offer)
             }
           }
-        }.addOnFailureListener { exception ->
-          Toast.makeText(context, exception.message.toString(), Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+          Toast.makeText(context, e.message.toString(), Toast.LENGTH_LONG).show()
         }
       }
     }
-
-
+  }
+  fetchOffersOnLoad()
   Scaffold(
     bottomBar = {
-      BottomNav(navController= navController)
+      BottomNav(navController = navController)
+    },
+    floatingActionButton = {
+      FloatingActionButton(onClick = {
+        navController.navigate("JobForm/true")
+      }) {
+        Icon(Icons.Default.Add, contentDescription = "New Offer")
+      }
     }
   ) {
-    Box {
-      CrossedCirclesShapeBlue()
-      Text(
-        text = "My Current Offers",
-        color = Color.Black,
-        textAlign = TextAlign.Center,
-        lineHeight = 4.29.em,
-        style = MaterialTheme.typography.headlineLarge,
-        modifier = Modifier
-          .align(alignment = Alignment.TopCenter)
-          .offset(
-            x = 0.dp,
-            y = 95.dp
-          )
-          .wrapContentHeight(align = Alignment.CenterVertically)
-      )
-
-      fetchOffersOnLoad()
-      val listHeight = if (offersList.size > 2) {
-        (offersList.size * 170).dp
-      } else {
-        600.dp
-      }
-      Column(
-        modifier = Modifier
-          .requiredHeight(listHeight)
-          .offset(y=150.dp)
-          .scrollable(rememberScrollState(), Orientation.Vertical)) {
-        LazyColumn(
+    if(offersList.size>=1){
+      MyCurrentOffers(offers = offersList, firestore = firestore, firebaseAuth = firebaseAuth, navController = navController, sharedOfferViewModel = sharedOfferViewModel)
+    } else {
+      Box {
+        CrossedCirclesShapeBlue()
+        Text(
+          text = "No Offers",
+          color = Color.Black,
+          textAlign = TextAlign.Center,
+          lineHeight = 4.29.em,
+          style = MaterialTheme.typography.headlineLarge,
           modifier = Modifier
-            .fillMaxHeight()
-            .padding(top = 70.dp)
-            .scrollable(rememberScrollState(), Orientation.Vertical)
-
-        ) {
-          items(offersList) { offer ->
-            OffreCard(
-              offer = offer,
-              firestore = firestore,
-              firebaseAuth = firebaseAuth,
-              navController = navController,
-              sharedOfferViewModel = sharedOfferViewModel
+            .align(alignment = Alignment.TopCenter)
+            .offset(
+              x = 0.dp,
+              y = 95.dp
             )
-          }
-        }
-        Button(onClick = { /*Navigate to create job form */ }) {
-          Text(
-            text = "Create New Offer",
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            lineHeight = 6.24.em,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier
-              .fillMaxSize()
-              .wrapContentHeight(align = Alignment.CenterVertically)
-          )
-        }
+            .wrapContentHeight(align = Alignment.CenterVertically)
+        )
       }
+    }
+  }
+}
+
+@Composable
+fun MyCurrentOffers(offers: List<OfferOutput>, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth, modifier: Modifier = Modifier, navController: NavController, sharedOfferViewModel: SharedOfferViewModel){
+  Box {
+    CrossedCirclesShapeBlue()
+    Text(
+      text = "My Current Offers",
+      color = Color.Black,
+      textAlign = TextAlign.Center,
+      lineHeight = 4.29.em,
+      style = MaterialTheme.typography.headlineLarge,
+      modifier = Modifier
+        .align(alignment = Alignment.TopCenter)
+        .offset(
+          x = 0.dp,
+          y = 95.dp
+        )
+        .wrapContentHeight(align = Alignment.CenterVertically)
+    )
+  }
+  Log.d("OffersList",offers.size.toString())
+  LazyColumn(
+    modifier = Modifier
+      .offset(x = 0.dp, y = 200.dp)
+      .verticalScroll(rememberScrollState())
+      .height((offers.size * 310).dp)
+  ) {
+    items(offers, key = { it.id }) { offer ->
+      OffreCard(
+        offer = offer,
+        firestore = firestore,
+        firebaseAuth = firebaseAuth,
+        navController = navController,
+        sharedOfferViewModel = sharedOfferViewModel
+      )
     }
   }
 }

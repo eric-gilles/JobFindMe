@@ -194,7 +194,6 @@ fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, fi
       val offersCollection = firestore.collection("Offers")
       offersCollection.get().addOnSuccessListener { documents ->
         documents.forEach { document ->
-          // Launch a coroutine to fetch each offer and its employer details
           CoroutineScope(Dispatchers.IO).launch {
             val offer = document.toOfferOutput()
             withContext(Dispatchers.Main) {

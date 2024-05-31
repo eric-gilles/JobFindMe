@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,7 +40,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import com.example.jobfindme.R
+import com.example.jobfindme.data.NewJobApplication
 import com.example.jobfindme.data.OfferOutput
 import com.example.jobfindme.data.User
 import com.example.jobfindme.ui.components.BottomNav
@@ -121,6 +124,38 @@ fun CandidatureResponse(
     }
   }
 
+  fun respondeToCandidature(response: String) {
+    val userId = user.id
+    userId.let { userId ->
+      offerOutput.let { offer ->
+        val candidaturesRef = firestore.collection("JobApplications")
+        candidaturesRef
+          .whereEqualTo("userId", userId)
+          .whereEqualTo("offerId", offer.id)
+          .get()
+          .addOnSuccessListener {
+            if (!it.isEmpty) {
+              val docId = it.documents[0].id
+              candidaturesRef.document(docId)
+                .update("status", response)
+                .addOnSuccessListener { _ ->
+                  Toast.makeText(context,"This candidature has been $response successfully", Toast.LENGTH_LONG).show()
+                  navController.navigate("CandidatureResponse/true") {
+                    popUpTo("CandidatureResponse/false") { inclusive = true }
+                  }
+                }
+                .addOnFailureListener{ e ->
+                  Toast.makeText(context,e.message.toString(), Toast.LENGTH_LONG).show()
+                }
+            }
+          }
+          .addOnFailureListener { e ->
+            Toast.makeText(context,e.message.toString(), Toast.LENGTH_LONG).show()
+          }
+      }
+    }
+  }
+
   Scaffold(
     bottomBar = {
       BottomNav(navController = navController)
@@ -170,6 +205,32 @@ fun CandidatureResponse(
             Section(value = "SMS", idImg = R.drawable.sms, onClick = {
               sendSms()
             })
+          }
+          if(!isAcceptedList){
+            Row(modifier = modifier
+              .align(alignment = Alignment.CenterHorizontally)
+              .padding(top = 60.dp)
+            ) {
+              Image(
+                painter = painterResource(id = R.drawable.decline),
+                contentDescription = "decline",
+                modifier = Modifier
+                  .size(90.dp)
+                  .clickable {
+                    respondeToCandidature("Rejected")
+                  }
+              )
+              Spacer(modifier = modifier.width(30.dp))
+              Image(
+                painter = painterResource(id = R.drawable.accept),
+                contentDescription = "accept",
+                modifier = Modifier
+                  .size(90.dp)
+                  .clickable {
+                    respondeToCandidature("Accepted")
+                  }
+              )
+            }
           }
         }
       }

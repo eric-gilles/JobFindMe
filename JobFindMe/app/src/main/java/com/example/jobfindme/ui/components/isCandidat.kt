@@ -2,12 +2,13 @@ package com.example.jobfindme.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Composable
-fun isCandidate(setValue: (Boolean) -> Unit, userId: String, firestore: FirebaseFirestore){
+fun isCandidate(setValue: (Boolean) -> Unit, userId: String, firestore: FirebaseFirestore) {
   LaunchedEffect(userId) {
     val isUserCandidate = suspendCoroutine<Boolean> { continuation ->
       val candidateDoc = firestore.collection("Users").document(userId)

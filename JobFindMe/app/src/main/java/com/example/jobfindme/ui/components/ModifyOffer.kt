@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.jobfindme.data.EmployerOutput
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -33,7 +34,7 @@ fun ModifyOffer(
     modifier: Modifier = Modifier,
     firestore: FirebaseFirestore,
     firebaseAuth: FirebaseAuth,
-    navController: NavController
+    navController: NavController,
 ) {
     var jobTitle by remember { mutableStateOf("") }
     var startingDate by remember { mutableStateOf("") }

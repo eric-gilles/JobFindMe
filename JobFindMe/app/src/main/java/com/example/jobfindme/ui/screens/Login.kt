@@ -244,8 +244,11 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
       ) {
         Button(
           onClick = {
-            // Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
-            SignIn(email.text,password.text)
+            if (email.text.isBlank() || password.text.isBlank()) {
+              Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_LONG).show()
+            } else {
+              SignIn(email.text,password.text)
+            }
           },
           colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
           modifier = Modifier

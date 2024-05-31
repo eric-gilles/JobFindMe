@@ -61,7 +61,8 @@ fun OffreCard(offer: OfferOutput, navController: NavController, firestore: Fireb
 
 
   ) {
-    Column {
+    Column (
+    ){
       Text(
         text = offer.title,
         color = Color(0xff50c2c9),
