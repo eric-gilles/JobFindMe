@@ -1,6 +1,7 @@
 package com.example.jobfindme.ui.components
 
 import android.content.Context
+import android.widget.Scroller
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,21 +23,15 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddLink
-import androidx.compose.material.icons.filled.Domain
-import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,22 +45,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.jobfindme.data.EmployerOutput
 import com.example.jobfindme.data.User
 import com.example.jobfindme.data.toUser
-import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
-import com.example.jobfindme.ui.screens.toReadableString
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+
 suspend fun fetchUser(): User? {
     val currentUser = FirebaseAuth.getInstance().currentUser
     if (currentUser != null) {
@@ -110,7 +101,7 @@ fun ProfilCandidat(
             CircularProgressIndicator()
         }
         error != null -> {
-            Text(text = "Erreur : ${error}")
+            Text(text = "Erreur : $error")
         }
         user != null -> {
 
@@ -121,21 +112,31 @@ fun ProfilCandidat(
         }
     }
 
-    user?.let { CandidatesProfileContent(it, firebaseAuth) }
+
+    user?.let {
+        Scaffold(
+            bottomBar = {
+                BottomNav(navController = navController)
+            }
+        ) { innerPadding ->
+            CandidatesProfileContent(user = it, modifier = Modifier.padding(innerPadding), firebaseAuth = firebaseAuth)
+        }
+    }
 }
 
 
 
 
 @Composable
-fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
+fun CandidatesProfileContent(user: User,modifier: Modifier = Modifier, firebaseAuth: FirebaseAuth) {
+
     val context: Context = LocalContext.current
 
-
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = Color(0xfff6f6f6))
+            .verticalScroll(rememberScrollState())  // Ajout du défilement vertical
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -184,55 +185,39 @@ fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
 
                     ) {
                         Image(
-
                             imageVector = Icons.Default.Person,
                             contentDescription = "person",
                             colorFilter = ColorFilter.tint(Color.Black),
-                            modifier = Modifier
-                                .size(110.dp)
+                            modifier = Modifier.size(110.dp)
                         )
                     }
                 }
             }
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ProfileFieldCandidatures(label = "Firstname", value = user.firstname)
             ProfileFieldCandidatures(label = "Lastname", value = user.lastname)
             (if (user.phone == null) "None" else user.phone)?.let {
-                ProfileFieldCandidatures(
-                    label = "Phone",
-                    value = it
-                )
+                ProfileFieldCandidatures(label = "Phone", value = it)
             }
             ProfileFieldCandidatures(label = "Email", value = user.email)
             (if (user.city == null) "None" else user.city)?.let {
-                ProfileFieldCandidatures(
-                    label = "City",
-                    value = it
-                )
+                ProfileFieldCandidatures(label = "City", value = it)
             }
             (if (user.nationality == null) "None" else user.nationality)?.let {
-                ProfileFieldCandidatures(
-                    label = "Nationality",
-                    value = it
-                )
+                ProfileFieldCandidatures(label = "Nationality", value = it)
             }
 
             Column(
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally)
-
             ) {
-
                 Box(
                     modifier = Modifier
                         .clickable {
-                            Toast
-                                .makeText(context, "Not yet implemented", Toast.LENGTH_LONG)
-                                .show()
+                            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
                         }
                         .padding(bottom = 16.dp)
                 ) {
@@ -243,10 +228,8 @@ fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
                             .clip(shape = CircleShape)
                             .background(color = Color(0xff50c2c9))
                             .offset(x = 85.dp, y = 12.dp)
-
                     ) {
                         Text(
-
                             text = "Edit Profil",
                             color = Color.White,
                             lineHeight = 8.33.em,
@@ -254,17 +237,14 @@ fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             ),
-                            modifier = Modifier
-                                .requiredHeight(height = 26.dp)
+                            modifier = Modifier.requiredHeight(height = 26.dp)
                         )
                     }
                 }
                 Box(
                     modifier = Modifier
                         .clickable {
-                            Toast
-                                .makeText(context, "Not yet implemented", Toast.LENGTH_LONG)
-                                .show()
+                            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
                         }
                 ) {
                     Box(
@@ -275,7 +255,6 @@ fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
                             .background(color = Color(0xff50c2c9))
                             .offset(x = 50.dp, y = 12.dp)
                             .clickable {
-
                                 firebaseAuth.sendPasswordResetEmail(user.email).addOnCompleteListener { task ->
                                     if(task.isSuccessful){
                                         Toast.makeText(context,"Email send to "+user.email, Toast.LENGTH_LONG).show()
@@ -297,12 +276,10 @@ fun CandidatesProfileContent(user: User, firebaseAuth: FirebaseAuth) {
                                 fontWeight = FontWeight.Bold
                             ),
                             textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .requiredHeight(height = 26.dp)
+                            modifier = Modifier.requiredHeight(height = 26.dp)
                         )
                     }
                 }
-
             }
         }
     }
@@ -316,8 +293,7 @@ fun ProfileFieldCandidatures(label: String, value: String, padding: Dp = 8.dp) {
             .padding(vertical = padding)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
 
         ) {
             Text(
@@ -329,8 +305,7 @@ fun ProfileFieldCandidatures(label: String, value: String, padding: Dp = 8.dp) {
                     fontWeight = FontWeight.Bold
                 ),
                 maxLines = 1,
-                modifier = Modifier
-                    .weight(0.4f)
+                modifier = Modifier.weight(0.4f)
             )
             Text(
                 text = value,

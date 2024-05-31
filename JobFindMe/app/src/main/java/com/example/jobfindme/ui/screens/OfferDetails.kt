@@ -39,7 +39,7 @@ import com.example.jobfindme.data.SharedOfferViewModel
 import com.example.jobfindme.ui.components.BottomNav
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.example.jobfindme.ui.components.LogoutButton
-import com.example.jobfindme.ui.components.isCandidate
+import com.example.jobfindme.ui.utils.isCandidate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -55,7 +55,9 @@ fun OfferDetails(navController: NavController, firestore: FirebaseFirestore, fir
 
   Scaffold(
     bottomBar = {
-      BottomNav(navController= navController)
+      if (firebaseAuth.currentUser != null) {
+        BottomNav(navController = navController)
+      }
     }
   ){
     Box(modifier= Modifier.verticalScroll(rememberScrollState())){

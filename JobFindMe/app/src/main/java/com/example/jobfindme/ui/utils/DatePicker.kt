@@ -1,4 +1,4 @@
-package com.example.jobfindme.ui.components
+package com.example.jobfindme.ui.utils
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api
