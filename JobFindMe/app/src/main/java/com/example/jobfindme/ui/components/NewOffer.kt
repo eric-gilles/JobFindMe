@@ -4,21 +4,33 @@ import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,16 +38,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.jobfindme.data.EmployerOutput
 import com.example.jobfindme.data.Offer
-import com.example.jobfindme.data.toEmployerOutput
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
@@ -66,7 +74,7 @@ fun NewOffer(
     var description by remember { mutableStateOf("") }
     val open = remember { mutableStateOf(false) }
     val open2 = remember { mutableStateOf(false) }
-    var uid = firebaseAuth.currentUser?.uid
+    val uid = firebaseAuth.currentUser?.uid
     val context: Context = LocalContext.current
     var shouldCreateJobOffer by remember { mutableStateOf(false) }
 
@@ -92,30 +100,32 @@ fun NewOffer(
     }
     @Composable
     fun createJobOffer(){
-        if(validateFields()){
-            if(uid!=null){
-                LaunchedEffect(uid) {
-                    val employerDocRef = firestore.collection("Employers").document(uid)
+        if(validateFields() && uid!=null) {
+            LaunchedEffect(uid) {
+                val employerDocRef = firestore.collection("Employers").document(uid)
 
-                    val endingDateDate =
-                        Date.from(endingDate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
-                    val startingDateDate =
-                        Date.from(startingDate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
-                    val newOffer : Offer = Offer(
-                        title= jobTitle,
-                        description= description,
-                        jobName= jobName,
-                        salary= salary.toDouble(),
-                        employer= employerDocRef,
-                        startingDate= startingDateDate,
-                        endingDate= endingDateDate,
-                        city= city
-                    )
-                    firestore.collection("Offers").add(newOffer).addOnSuccessListener {
-                        Toast.makeText(context, "Offer has been created successfully", Toast.LENGTH_LONG).show()
-                        navController.navigate("Search") {
-                            popUpTo("JobForm/true") { inclusive = true }
-                        }
+                val endingDateDate =
+                    Date.from(endingDate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                val startingDateDate =
+                    Date.from(startingDate.value.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                val newOffer: Offer = Offer(
+                    title = jobTitle,
+                    description = description,
+                    jobName = jobName,
+                    salary = salary.toDouble(),
+                    employer = employerDocRef,
+                    startingDate = startingDateDate,
+                    endingDate = endingDateDate,
+                    city = city
+                )
+                firestore.collection("Offers").add(newOffer).addOnSuccessListener {
+                    Toast.makeText(
+                        context,
+                        "Offer has been created successfully",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    navController.navigate("Search") {
+                        popUpTo("JobForm/true") { inclusive = true }
                     }
                 }
             }
@@ -170,8 +180,7 @@ fun NewOffer(
                         Text(
                             text = "Job Title",
                             maxLines = 1,
-                            modifier = modifier
-                                .horizontalScroll(rememberScrollState())
+                            modifier = modifier.horizontalScroll(rememberScrollState())
                         )
                     },
                     modifier = Modifier.fillMaxSize(),

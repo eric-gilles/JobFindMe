@@ -48,7 +48,6 @@ import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
@@ -410,8 +409,7 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             lineHeight = 6.25.em,
             style = TextStyle(
               fontSize = 16.sp,
-              fontWeight = FontWeight.Bold
-            ),
+              fontWeight = FontWeight.Bold),
             modifier = Modifier.align(alignment = Alignment.CenterVertically)
           )
         }

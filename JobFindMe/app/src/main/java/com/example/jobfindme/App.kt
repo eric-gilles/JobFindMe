@@ -38,7 +38,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorage: FirebaseStorage) {
@@ -166,7 +165,8 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
         navController.navigate("Choose")
       }
     }
-    composable("CandidatureResponse/{isAcceptedList}", arguments = listOf(navArgument("isAcceptedList") { type = NavType.BoolType })) { backStackEntry ->
+    composable("CandidatureResponse/{isAcceptedList}",
+      arguments = listOf(navArgument("isAcceptedList") { type = NavType.BoolType })) { backStackEntry ->
       if (firebaseAuth.currentUser != null) {
         val isAcceptedList: Boolean = backStackEntry.arguments?.getBoolean("isAcceptedList") == true
         val user = sharedUserViewModel.user

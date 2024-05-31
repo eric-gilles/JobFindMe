@@ -40,7 +40,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -290,7 +289,7 @@ fun Login( modifier: Modifier = Modifier, navController: NavController, firebase
             style = TextStyle(
               fontSize = 16.sp,
               fontWeight = FontWeight.Bold
-            ),
+            )
           )
         }
       }

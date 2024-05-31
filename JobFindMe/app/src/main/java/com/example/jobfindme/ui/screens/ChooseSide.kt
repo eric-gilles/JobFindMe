@@ -1,6 +1,5 @@
 package com.example.jobfindme.ui.screens
 
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfindme.R
 import com.example.jobfindme.ui.components.CrossedCirclesShapeBlue
-
 
 @Composable
 fun ChooseSide(

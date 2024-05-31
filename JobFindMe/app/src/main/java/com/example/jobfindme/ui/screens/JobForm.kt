@@ -32,7 +32,6 @@ fun FormJob(modifier: Modifier = Modifier, navController: NavController, firesto
       BottomNav(navController= navController)
     }
   ){
-
     if (addOffer){
       NewOffer(navController= navController, firebaseAuth = firebaseAuth, firestore = firestore)
     }else {

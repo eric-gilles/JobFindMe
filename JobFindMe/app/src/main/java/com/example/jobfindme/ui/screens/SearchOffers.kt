@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -63,7 +64,6 @@ import com.example.jobfindme.ui.components.LogoutButton
 import com.example.jobfindme.ui.components.OffreCard
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -183,7 +183,7 @@ fun SearchBar(
 fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, sharedOfferViewModel: SharedOfferViewModel){
   val screenWidth = LocalConfiguration.current.screenWidthDp.dp
   val context : Context = LocalContext.current
-  var offersList = remember { mutableStateListOf<OfferOutput>() }
+  val offersList = remember { mutableStateListOf<OfferOutput>() }
 
 
 
@@ -239,10 +239,10 @@ fun SearchOffers(modifier: Modifier = Modifier, navController: NavController, fi
           .requiredHeight(listHeight)
           .padding(top = 70.dp)
           .scrollable(rememberScrollState(), Orientation.Vertical)
-
       ) {
         items(offersList) { offer ->
           OffreCard(offer=offer, firestore = firestore, firebaseAuth = firebaseAuth, navController = navController, sharedOfferViewModel = sharedOfferViewModel)
+          Spacer(modifier = Modifier.height(10.dp))
         }
       }
     }

@@ -1,7 +1,6 @@
 package com.example.jobfindme.ui.components
 
 import android.content.Context
-import android.widget.Scroller
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -104,22 +103,17 @@ fun ProfilCandidat(
             Text(text = "Erreur : $error")
         }
         user != null -> {
-
+            Scaffold(
+                bottomBar = {
+                    BottomNav(navController = navController)
+                }
+            ) { innerPadding ->
+                CandidatesProfileContent(user = user!!, modifier = Modifier.padding(innerPadding), firebaseAuth = firebaseAuth)
+            }
         }
         else -> {
             Toast.makeText(context, "User not connected", Toast.LENGTH_LONG).show()
             navController.navigate("Signin")
-        }
-    }
-
-
-    user?.let {
-        Scaffold(
-            bottomBar = {
-                BottomNav(navController = navController)
-            }
-        ) { innerPadding ->
-            CandidatesProfileContent(user = it, modifier = Modifier.padding(innerPadding), firebaseAuth = firebaseAuth)
         }
     }
 }

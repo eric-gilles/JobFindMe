@@ -40,9 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import com.example.jobfindme.R
-import com.example.jobfindme.data.NewJobApplication
 import com.example.jobfindme.data.OfferOutput
 import com.example.jobfindme.data.User
 import com.example.jobfindme.ui.components.BottomNav
@@ -54,7 +52,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
 
