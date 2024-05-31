@@ -15,8 +15,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +49,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore) {
   var companyName by remember { mutableStateOf(TextFieldValue()) }
@@ -174,12 +177,19 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
                 fontSize = 18.sp
               )
             },
-
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
             singleLine = true,
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
           OutlinedTextField(
             value = companyAddress,
@@ -197,10 +207,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
               )
             },
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
             singleLine = true,
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
           OutlinedTextField(
             value = email,
@@ -219,9 +237,17 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
             },
             singleLine = true,
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
 
           OutlinedTextField(
@@ -240,10 +266,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
               )
             },
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
             singleLine = true,
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
 
           )
           OutlinedTextField(
@@ -263,10 +297,18 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
               )
             },
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
             singleLine = true,
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
           OutlinedTextField(
             value = confirm,
@@ -285,17 +327,25 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
               )
             },
             textStyle = TextStyle(
-              fontSize = 18.sp
+              fontSize = 18.sp,
+              color = Color.Gray
             ),
             modifier = Modifier.padding(vertical = 4.dp),
             singleLine = true,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+              focusedBorderColor = Color.Black,
+              unfocusedBorderColor = Color.Black,
+              cursorColor = Color.Black,
+              focusedLabelColor = Color.Gray,
+              unfocusedLabelColor = Color.Gray
+            )
           )
         }
       }
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(x = 24.dp, y = 730.dp)
+          .offset(x = 24.dp, y = 680.dp)
           .requiredWidth(width = 326.dp)
           .requiredHeight(height = 64.dp)
       ) {
@@ -332,19 +382,19 @@ fun EmployerForm(modifier: Modifier = Modifier, navController: NavController, fi
         },
         modifier = Modifier
           .align(alignment = Alignment.TopCenter)
-          .offset(x = (-0.5).dp, y = 820.dp)
+          .offset(x = (-0.5).dp, y = 760.dp)
           .clickable { navController.navigate("Signin") }
       )
       Box(
         modifier = Modifier
           .align(alignment = Alignment.TopStart)
-          .offset(x = 84.dp, y = 870.dp)
+          .offset(x = 84.dp, y = 800.dp)
           .requiredWidth(width = 207.dp)
           .requiredHeight(height = 34.dp)
       ) {
         Button(
           onClick = {
-            Toast.makeText(context, "Not yet implemented",Toast.LENGTH_LONG).show()
+            navController.navigate("Signin/anonymous")
           },
           colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xff50c2c9)),

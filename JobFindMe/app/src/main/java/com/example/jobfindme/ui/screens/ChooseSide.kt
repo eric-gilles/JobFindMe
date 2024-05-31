@@ -116,7 +116,7 @@ fun ChooseSide(
         ) {
           Text(
             text = "Candidat",
-            color = Color(0xff1e1e1e),
+            color = Color.White,
             textAlign = TextAlign.Center,
             lineHeight = 6.25.em,
             style = TextStyle(
@@ -144,7 +144,7 @@ fun ChooseSide(
         ) {
           Text(
             text = "Employer",
-            color = Color(0xff1e1e1e),
+            color = Color.White,
             textAlign = TextAlign.Center,
             lineHeight = 6.25.em,
             style = TextStyle(
@@ -168,7 +168,7 @@ fun ChooseSide(
       ) {
         Text(
           text = "Anonymous",
-          color = Color(0xff1e1e1e),
+          color = Color.White,
           textAlign = TextAlign.Center,
           lineHeight = 6.25.em,
           style = TextStyle(
