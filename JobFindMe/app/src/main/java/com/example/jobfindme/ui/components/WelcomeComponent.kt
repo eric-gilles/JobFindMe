@@ -192,7 +192,7 @@ fun WelcomeComponent(
       ) {
         Button(
           onClick = {
-            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_LONG).show()
+            navController.navigate("Search")
           },
           colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xff50c2c9)
