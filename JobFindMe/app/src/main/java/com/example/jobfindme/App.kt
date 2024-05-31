@@ -46,7 +46,6 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
   val context: Context = LocalContext.current
   val sharedOfferViewModel: SharedOfferViewModel = viewModel()
   val (isCandidate, setIsCandidate) = remember { mutableStateOf(false) }
-  val userId = firebaseAuth.currentUser?.uid
   val sharedUserViewModel: SharedUserViewModel = viewModel()
 
   NavHost(navController, startDestination = "WelcomePage") {
@@ -56,7 +55,6 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
     composable("Signin/anonymous") {
       firebaseAuth.signInAnonymously()
       WelcomeComponent(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
-      //redirige vers les offres pour les anonymes
     }
     composable("Signup/user") {
       UserForm(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth, firebaseStorage = firebaseStorage)
@@ -92,6 +90,7 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
       Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
     }
     composable("Search") {
+      val userId = firebaseAuth.currentUser?.uid
       if (userId!=null){
         isCandidate(setIsCandidate, userId, firestore)
         if (isCandidate) {
@@ -99,16 +98,31 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
         } else {
           OffersEmployer(navController = navController, firestore = firestore, firebaseAuth = firebaseAuth, sharedOfferViewModel = sharedOfferViewModel)
         }
+      } else {
+        SearchOffers(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, sharedOfferViewModel = sharedOfferViewModel)
       }
     }
     composable("Account") {
-      if (userId!=null){
-        isCandidate(setIsCandidate, userId, firestore)
-        if (isCandidate) {
-            ProfilCandidat(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
-        } else {
-            ProfilEmployer(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore)
+      if (firebaseAuth.currentUser != null) {
+        val userId = firebaseAuth.currentUser?.uid
+        if (userId != null) {
+          isCandidate(setIsCandidate, userId, firestore)
+          if (isCandidate) {
+            ProfilCandidat(
+              navController = navController,
+              firebaseAuth = firebaseAuth,
+              firestore = firestore
+            )
+          } else {
+            ProfilEmployer(
+              navController = navController,
+              firebaseAuth = firebaseAuth,
+              firestore = firestore
+            )
+          }
         }
+      } else {
+        navController.navigate("Choose")
       }
     }
     composable("OfferDetails"){
@@ -119,25 +133,44 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
         sharedOfferViewModel = sharedOfferViewModel
       )
     }
+    composable("JobForm/{isNew}", arguments = listOf(navArgument("isNew") { type = NavType.BoolType })) { backStackEntry ->
+      val isNew: Boolean = backStackEntry.arguments?.getBoolean("isNew") == true
+      if (firebaseAuth.currentUser != null) {
+
+        FormJob(
+          navController = navController,
+          firestore = firestore,
+          firebaseAuth = firebaseAuth,
+          addOffer = isNew
+        )
+      } else {
+        navController.navigate("Choose")
+      }
+    }
     composable("CandidatureList/{isAcceptedList}", arguments = listOf(navArgument("isAcceptedList") { type = NavType.BoolType })) { backStackEntry ->
 
       val isAcceptedList: Boolean = backStackEntry.arguments?.getBoolean("isAcceptedList") == true
-      sharedOfferViewModel.offer?.let {
-        CandidaturesList(
-          firestore = firestore,
-          firebaseAuth = firebaseAuth,
-          offerOutput = it,
-          isAcceptedList = isAcceptedList,
-          navController = navController,
-          sharedUserViewModel = sharedUserViewModel
-        )
+      if (firebaseAuth.currentUser != null) {
+        sharedOfferViewModel.offer?.let {
+          CandidaturesList(
+            firestore = firestore,
+            firebaseAuth = firebaseAuth,
+            offerOutput = it,
+            isAcceptedList = isAcceptedList,
+            navController = navController,
+            sharedUserViewModel = sharedUserViewModel
+          )
+        }
+      } else {
+        navController.navigate("Choose")
       }
     }
     composable("CandidatureResponse/{isAcceptedList}", arguments = listOf(navArgument("isAcceptedList") { type = NavType.BoolType })) { backStackEntry ->
-      val isAcceptedList: Boolean = backStackEntry.arguments?.getBoolean("isAcceptedList") == true
-      val user = sharedUserViewModel.user
-      val offer = sharedOfferViewModel.offer
-      if (user != null && offer != null){
+      if (firebaseAuth.currentUser != null) {
+        val isAcceptedList: Boolean = backStackEntry.arguments?.getBoolean("isAcceptedList") == true
+        val user = sharedUserViewModel.user
+        val offer = sharedOfferViewModel.offer
+        if (user != null && offer != null) {
           CandidatureResponse(
             firestore = firestore,
             firebaseAuth = firebaseAuth,
@@ -146,13 +179,34 @@ fun App(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, firebaseStorag
             navController = navController,
             user = user
           )
+        }
+      } else {
+        navController.navigate("Choose")
       }
     }
     composable("ModifyOffer") {
-      FormJob(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, addOffer = false)
+      if (firebaseAuth.currentUser != null) {
+        FormJob(
+          navController = navController,
+          firebaseAuth = firebaseAuth,
+          firestore = firestore,
+          addOffer = false
+        )
+      } else {
+        navController.navigate("Choose")
+      }
     }
     composable("NewOffer") {
-      FormJob(navController = navController, firebaseAuth = firebaseAuth, firestore = firestore, addOffer = true)
+      if (firebaseAuth.currentUser != null) {
+        FormJob(
+          navController = navController,
+          firebaseAuth = firebaseAuth,
+          firestore = firestore,
+          addOffer = true
+        )
+      } else {
+        navController.navigate("Choose")
+      }
     }
   }
 }

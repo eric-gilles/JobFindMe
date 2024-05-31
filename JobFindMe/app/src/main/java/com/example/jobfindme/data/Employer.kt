@@ -1,5 +1,6 @@
 package com.example.jobfindme.data
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import java.util.Dictionary
 
@@ -21,6 +22,7 @@ data class CreateEmployer(
 
 
 fun DocumentSnapshot.toEmployerOutput(): EmployerOutput {
+    Log.d("Employer",id)
     return EmployerOutput(
         id = id,
         name = getString("name") ?: "",

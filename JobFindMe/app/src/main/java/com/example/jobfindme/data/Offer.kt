@@ -1,25 +1,25 @@
 package com.example.jobfindme.data
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 
 data class Offer(
-  val idOffer: String,
   val title: String,
   val description: String,
   val jobName: String,
-  val salary: String,
-  val company: DocumentReference,
+  val salary: Comparable<*>,
+  val employer: DocumentReference,
   val startingDate: Date,
   val endingDate: Date,
-  val jobApplications: List<NewJobApplication>)
+  val city: String
+)
 
 data class OfferOutput(
   val id: String,
@@ -43,11 +43,13 @@ suspend fun DocumentSnapshot.toOfferOutput(): OfferOutput {
     description = getString("description") ?: "",
     startingDate = getDate("startingDate") ?: Date(),
     endingDate = getDate("endingDate") ?: Date(),
-    employer = getDocumentReference("Employer")!!,
+    employer = getDocumentReference("employer")!!,
     city = getString("city") ?: ""
   )
+
   val employerSnapshot = offer.employer.get().await()
   offer.employerDetails = employerSnapshot.toEmployerOutput()
+
 
   return offer
 }

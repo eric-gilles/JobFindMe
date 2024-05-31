@@ -191,88 +191,92 @@ fun Details(navController: NavController, offerOutput: OfferOutput?, firebaseAut
       DetailsSection("End Date", offer.endingDate.toReadableString())
       DetailsSection("Employer Address", offer.employerDetails.address)
       Spacer(modifier = Modifier.height(40.dp))
-      Column(
-        modifier = Modifier
-          .padding(16.dp)
-          .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        if (isCandidate) {
-          Button(
-            onClick = { /* Handle contact action */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-              .padding(bottom = 16.dp)
-              .fillMaxWidth()
+      if(userId!=null){
 
 
-          ) {
-            Text(
-              text = "Contact",
-              color = Color.White,
-              fontSize = 18.sp
-            ) // Ajustez la taille du texte ici
-          }
-          Button(
-            onClick = {
-              addNewApplication()
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-              .padding(bottom = 16.dp)
-              .fillMaxWidth()
-          ) {
-            Text(
-              text = "Apply Now",
-              color = Color.White,
-              fontSize = 18.sp
-            )
-          }
-        } else {
+        Column(
+          modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          if (isCandidate && firebaseAuth.currentUser != null) {
+            Button(
+              onClick = { /* Handle contact action */ },
+              colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+              shape = RoundedCornerShape(50),
+              modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
 
-          Button(
-            onClick = {
 
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-              .padding(bottom = 16.dp)
-              .fillMaxWidth()
-          ) {
-            Text(text = "Modify", color = Color.White, fontSize = 18.sp)
-          }
-
-          Button(
-            onClick = {
-              navController.navigate(
-                "CandidatureList/false",
+            ) {
+              Text(
+                text = "Contact",
+                color = Color.White,
+                fontSize = 18.sp
+              ) // Ajustez la taille du texte ici
+            }
+            Button(
+              onClick = {
+                addNewApplication()
+              },
+              colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+              shape = RoundedCornerShape(50),
+              modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+            ) {
+              Text(
+                text = "Apply Now",
+                color = Color.White,
+                fontSize = 18.sp
               )
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-              .padding(bottom = 16.dp)
-              .fillMaxWidth()
-          ) {
-            Text(text = "All Applications", color = Color.White, fontSize = 18.sp)
-          }
+            }
+          } else if (firebaseAuth.currentUser != null) {
 
-          Button(
-            onClick = {
-              navController.navigate(
-                "CandidatureList/true",
-              )
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-              .padding(bottom = 16.dp)
-              .fillMaxWidth()
-          ) {
-            Text(text = "Applications Accepted", color = Color.White, fontSize = 18.sp)
+            Button(
+              onClick = {
+
+              },
+              colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+              shape = RoundedCornerShape(50),
+              modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+            ) {
+              Text(text = "Modify", color = Color.White, fontSize = 18.sp)
+            }
+
+            Button(
+              onClick = {
+                navController.navigate(
+                  "CandidatureList/false",
+                )
+              },
+              colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+              shape = RoundedCornerShape(50),
+              modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+            ) {
+              Text(text = "All Applications", color = Color.White, fontSize = 18.sp)
+            }
+
+            Button(
+              onClick = {
+                navController.navigate(
+                  "CandidatureList/true",
+                )
+              },
+              colors = ButtonDefaults.buttonColors(containerColor = Color(0xff50c2c9)),
+              shape = RoundedCornerShape(50),
+              modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+            ) {
+              Text(text = "Applications Accepted", color = Color.White, fontSize = 18.sp)
+            }
           }
         }
       }
