@@ -4,12 +4,12 @@
 
 ## Code de l'application à l'adresse suivante :  https://github.com/eric-gilles/JobFindMe
 ## Vidéo de présentation de l'application à l'adresse suivante : https://youtu.be/JLtRT4H6frg
-## Lien de la maquette Figma : https://www.figma.com/file/ZSaZGAQnrBKZwlQBm2vPVy/JobFIndMe?type=design&node-id=19%3A3904&mode=design&t=P7U5cbIjrOScRDN7-1
+## Lien de la maquette Figma : https://www.figma.com/file/ZSaZGAQnrBKZwlQBm2vPVy/JobFIndMe?type=design&node-id=19%3A3904&mode=design&t=P7U5cbIjrOScRDN7-1
+
 
 ## Auteurs
 - [Éric GILLES](https://github.com/eric-gilles)
-- [Morgan NAVEL](hhttps://github.com/MorganNavel)
-
+- [Morgan NAVEL](https://github.com/MorganNavel)
 
 ## Description
 JobFindMe est une application mobile de recherche d'emploi d'intérim qui permet de consulter des offres d'emploi, de postuler à des offres d'emploi et de gérer ses candidatures pour des utilisateurs inscrits. Elle permet également aux entreprises de publier des offres d'emploi et de consulter les candidatures reçues.
