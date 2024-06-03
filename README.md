@@ -1,10 +1,14 @@
-# JobFindMe
+# JobFindMe [<img src="https://github.com/eric-gilles/JobFindMe/blob/main/JobFindMe/app/src/main/res/drawable/app_logo_rounded.png" width="10%">](https://github.com/eric-gilles/JobFindMe/)
+
 
 # Application de recherche d'emploi d'Intérim 
 
-## Code de l'application à l'adresse suivante :  https://github.com/eric-gilles/JobFindMe
-## Vidéo de présentation de l'application à l'adresse suivante : https://youtu.be/JLtRT4H6frg
-## Lien de la maquette Figma : https://www.figma.com/file/ZSaZGAQnrBKZwlQBm2vPVy/JobFIndMe?type=design&node-id=19%3A3904&mode=design&t=P7U5cbIjrOScRDN7-1
+## Code de l'application à l'adresse suivante :  
+https://github.com/eric-gilles/JobFindMe
+## Vidéo de présentation de l'application à l'adresse suivante : 
+https://youtu.be/JLtRT4H6frg
+## Lien de la maquette Figma : 
+https://www.figma.com/file/ZSaZGAQnrBKZwlQBm2vPVy/JobFIndMe?type=design&node-id=19%3A3904&mode=design&t=P7U5cbIjrOScRDN7-1
 
 
 ## Auteurs
