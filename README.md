@@ -19,10 +19,10 @@ https://www.figma.com/file/ZSaZGAQnrBKZwlQBm2vPVy/JobFIndMe?type=design&node-id=
 JobFindMe est une application mobile de recherche d'emploi d'intérim qui permet de consulter des offres d'emploi, de postuler à des offres d'emploi et de gérer ses candidatures pour des utilisateurs inscrits. Elle permet également aux entreprises de publier des offres d'emploi et de consulter les candidatures reçues.
 
 ## Technologies utilisées
-- Android Studio
-- Jetpack Compose
-- Kotlin
-- Firebase
+- [![Android Studio](https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)](https://developer.android.com/studio)
+- [![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-6200EE?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/jetpack/compose)
+- [![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org/)
+- [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white)](https://firebase.google.com/)
 
 ## Fonctionnalités
 - Inscription et connexion
